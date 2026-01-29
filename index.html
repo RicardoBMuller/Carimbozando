@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CARIMBOZANDO - A vida é o que é!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- IDENTIDADE VISUAL CARIMBOZANDO (Tropical & Alegre) --- */
+        :root {
+            --bg-color: #f9d976; /* Amarelo Sol */
+            --card-glass: rgba(255, 255, 255, 0.92);
+            --item-hover: #f0f0f0;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --accent-color: #27ae60; /* Verde Palmeira */
+            --accent-hover: #2ecc71;
+            --detail-orange: #e67e22; /* Laranja Pôr do Sol */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            /* Gradiente que remete ao horizonte da praia */
+            background-image: linear-gradient(180deg, #74b9ff 0%, #f9d976 70%, #fab1a0 100%);
+        }
+
+        /* Container Principal com bordas levemente irregulares para parecer desenho */
+        .main-wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: 0;
+            width: 90%;
+            max-width: 900px;
+            height: 550px;
+            background-color: var(--card-glass);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 3px solid var(--text-primary); /* Bordas vincadas/estilo cartoon */
+        }
+
+        /* Barra Lateral */
+        .playlist-sidebar {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.4);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 2px solid var(--text-primary);
+        }
+
+        .playlist-header {
+            font-family: 'Handlee', cursive;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--detail-orange);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .playlist-items {
+            list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1;
+        }
+
+        .playlist-items::-webkit-scrollbar { width: 6px; }
+        .playlist-items::-webkit-scrollbar-thumb { background-color: var(--detail-orange); border-radius: 10px; }
+
+        .playlist-item {
+            display: flex; align-items: center; padding: 12px; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-bottom: 8px;
+            border: 1px solid transparent;
+        }
+        .playlist-item:hover { background-color: var(--item-hover); border: 1px solid var(--detail-orange); }
+        .playlist-item.active-song { background-color: white; border: 2px solid var(--accent-color); transform: scale(1.02); }
+        
+        .item-icon { font-size: 0.8rem; color: var(--accent-color); margin-right: 12px; opacity: 0; }
+        .playlist-item.active-song .item-icon { opacity: 1; }
+        
+        .item-info { display: flex; flex-direction: column; }
+        .item-title { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); }
+        .item-artist { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* Área do Player */
+        .player-container {
+            width: 380px; padding: 30px; display: flex; flex-direction: column; justify-content: center; position: relative;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .cover-area {
+            width: 100%; aspect-ratio: 1; border-radius: 18px; overflow: hidden; 
+            box-shadow: 8px 8px 0px var(--text-primary); /* Sombra estilo pop-art */
+            margin-bottom: 25px; border: 3px solid var(--text-primary);
+        }
+        .cover-area img { width: 100%; height: 100%; object-fit: cover; }
+
+        .song-info-player { text-align: center; margin-bottom: 20px; }
+        .song-title-main { font-family: 'Handlee', cursive; font-size: 1.8rem; font-weight: 700; margin: 0; color: var(--detail-orange); }
+        .artist-name-main { color: var(--accent-color); font-weight: 700; font-size: 1rem; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Barra de Progresso */
+        .progress-area { height: 10px; width: 100%; background: #dfe6e9; border-radius: 50px; cursor: pointer; margin-bottom: 8px; border: 2px solid var(--text-primary); }
+        .progress-bar { height: 100%; width: 0%; background: var(--detail-orange); border-radius: 50px; position: relative; }
+        
+        .timers { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
+        
+        /* Controles */
+        .controls { display: flex; justify-content: space-between; align-items: center; }
+        .btn { background: none; border: none; color: var(--text-primary); font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
+        .btn:hover { color: var(--detail-orange); transform: translateY(-3px); }
+        .btn.active { color: var(--detail-orange); }
+
+        .btn-main { 
+            width: 65px; height: 65px; background-color: var(--accent-color); color: white; border-radius: 50%; 
+            font-size: 1.6rem; display: flex; justify-content: center; align-items: center; 
+            box-shadow: 4px 4px 0px var(--text-primary); border: 2px solid var(--text-primary);
+        }
+        .btn-main:hover { background-color: var(--detail-orange); transform: scale(1.1); }
+
+        /* Popup de Letras */
+        .lyrics-popup {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color); z-index: 10; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; opacity: 0; pointer-events: none; 
+            transition: 0.3s; padding: 30px; box-sizing: border-box; border-radius: 20px;
+        }
+        .lyrics-popup.show { opacity: 1; pointer-events: auto; }
+        .lyrics-content {
+            font-family: 'Handlee', cursive; text-align: center; font-size: 1.2rem; line-height: 1.6; color: var(--text-primary);
+            overflow-y: auto; max-height: 80%; width: 100%; white-space: pre-wrap;
+        }
+        .close-lyrics { margin-top: 20px; background: var(--text-primary); border: none; color: white; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: 700; }
+
+        /* Mobile */
+        @media (max-width: 850px) {
+            .main-wrapper { flex-direction: column; height: auto; border-radius: 0; border: none; width: 100%; }
+            .player-container { width: 100%; order: 1; box-sizing: border-box; }
+            .playlist-sidebar { width: 100%; order: 2; height: 350px; border-right: none; border-top: 3px solid var(--text-primary); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="playlist-sidebar">
+        <div class="playlist-header"><i class="fas fa-compact-disc"></i> Álbum: A vida é o que é!</div>
+        <ul class="playlist-items" id="playlist-ul"></ul>
+    </div>
+
+    <div class="player-container" id="player">
+        <div class="lyrics-popup" id="lyrics-popup">
+            <div class="lyrics-content" id="lyrics-text">Vibrações positivas...</div>
+            <button class="close-lyrics" id="close-lyrics">Voltar para o Som</button>
+        </div>
+
+        <div class="cover-area"><img src="" alt="Capa Carimbozando" id="cover"></div>
+
+        <div class="song-info-player">
+            <h2 class="song-title-main" id="title">Carregando...</h2>
+            <p class="artist-name-main" id="artist">CARIMBOZANDO</p>
+        </div>
+
+        <div class="progress-area" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="timers">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="lyrics-btn" title="Letra"><i class="fas fa-quote-left"></i></button>
+            <button class="btn" id="prev"><i class="fas fa-backward"></i></button>
+            <button class="btn btn-main" id="play"><i class="fas fa-play"></i></button>
+            <button class="btn" id="next"><i class="fas fa-forward"></i></button>
+            <button class="btn" id="shuffle" title="Aleatório"><i class="fas fa-random"></i></button>
+        </div>
+    </div>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+    const songs = [
+        {
+            "title": "O Ofício de Ser",
+            "artist": "Carimbozando",
+            "src": "musicas/O Ofício de Ser.mp3",
+            "cover": "musicas/album_cover.png",
+            "lyricsFile": "musicas/O Ofício de Ser.txt"
+        },
+        {
+            "title": "Onde o Sol se Demora",
+            "artist": "Carimbozando",
+            "src": "musicas/Onde o Sol se Demora.mp3",
+            "cover": "musicas/album_cover.png",
+            "lyricsFile": "musicas/Onde o Sol se Demora.txt"
+        }
+    ];
+
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const shuffleBtn = document.getElementById('shuffle');
+    const lyricsBtn = document.getElementById('lyrics-btn');
+    const lyricsPopup = document.getElementById('lyrics-popup');
+    const lyricsText = document.getElementById('lyrics-text');
+    const closeLyricsBtn = document.getElementById('close-lyrics');
+    
+    const titleEl = document.getElementById('title');
+    const artistEl = document.getElementById('artist');
+    const coverEl = document.getElementById('cover');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const currTimeEl = document.getElementById('current-time');
+    const durTimeEl = document.getElementById('duration');
+    const playlistUl = document.getElementById('playlist-ul');
+
+    const defaultCover = "musicas/album_cover.png";
+    let songIndex = 0;
+    let isShuffle = false;
+
+    function renderPlaylist() {
+        playlistUl.innerHTML = "";
+        songs.forEach((song, index) => {
+            const li = document.createElement('li');
+            li.classList.add('playlist-item');
+            li.addEventListener('click', () => {
+                songIndex = index;
+                loadSong(songs[songIndex]);
+                playSong();
+            });
+            li.innerHTML = `
+                <div class="item-icon"><i class="fas fa-play"></i></div>
+                <div class="item-info">
+                    <span class="item-title">${song.title}</span>
+                    <span class="item-artist">${song.artist}</span>
+                </div>
+            `;
+            playlistUl.appendChild(li);
+        });
+    }
+
+    function updatePlaylistActiveState() {
+        document.querySelectorAll('.playlist-item').forEach((item, index) => {
+            index === songIndex ? item.classList.add('active-song') : item.classList.remove('active-song');
+        });
+    }
+
+    function fetchLyrics(filePath) {
+        lyricsText.innerText = "Buscando a letra...";
+        fetch(filePath)
+            .then(r => r.text())
+            .then(t => lyricsText.innerText = t)
+            .catch(() => lyricsText.innerText = "Letra não encontrada para esta canção.");
+    }
+
+    function loadSong(song) {
+        titleEl.innerText = song.title;
+        artistEl.innerText = song.artist;
+        audio.src = encodeURI(song.src);
+        coverEl.src = song.cover || defaultCover;
+        fetchLyrics(song.lyricsFile);
+        updatePlaylistActiveState();
+    }
+
+    function playSong() {
+        document.getElementById('player').classList.add('playing');
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        audio.play();
+    }
+
+    function pauseSong() {
+        document.getElementById('player').classList.remove('playing');
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        audio.pause();
+    }
+
+    playBtn.addEventListener('click', () => {
+        const isPlaying = document.getElementById('player').classList.contains('playing');
+        isPlaying ? pauseSong() : playSong();
+    });
+
+    lyricsBtn.addEventListener('click', () => lyricsPopup.classList.add('show'));
+    closeLyricsBtn.addEventListener('click', () => lyricsPopup.classList.remove('show'));
+
+    function nextSong() {
+        songIndex = isShuffle ? Math.floor(Math.random() * songs.length) : (songIndex + 1) % songs.length;
+        loadSong(songs[songIndex]);
+        playSong();
+    }
+
+    function prevSong() {
+        songIndex = (songIndex - 1 + songs.length) % songs.length;
+        loadSong(songs[songIndex]);
+        playSong();
+    }
+
+    prevBtn.addEventListener('click', prevSong);
+    nextBtn.addEventListener('click', nextSong);
+    shuffleBtn.addEventListener('click', () => {
+        isShuffle = !isShuffle;
+        shuffleBtn.classList.toggle('active', isShuffle);
+    });
+
+    audio.addEventListener('timeupdate', (e) => {
+        const { duration, currentTime } = e.srcElement;
+        const progressPercent = (currentTime / duration) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+        
+        if(duration) {
+            const dMin = Math.floor(duration / 60);
+            const dSec = Math.floor(duration % 60);
+            durTimeEl.innerText = `${dMin}:${dSec < 10 ? '0' : ''}${dSec}`;
+        }
+        const cMin = Math.floor(currentTime / 60);
+        const cSec = Math.floor(currentTime % 60);
+        currTimeEl.innerText = `${cMin}:${cSec < 10 ? '0' : ''}${cSec}`;
+    });
+
+    progressContainer.addEventListener('click', function(e) {
+        const width = this.clientWidth;
+        const clickX = e.offsetX;
+        audio.currentTime = (clickX / width) * audio.duration;
+    });
+    
+    audio.addEventListener('ended', nextSong);
+
+    renderPlaylist();
+    loadSong(songs[songIndex]);
+</script>
+</body>
+</html>
