@@ -3,195 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>CARIMBOZANDO - A vida é o que é!</title>
+    <title>Ispótifai - Carimbozando</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Patrick+Hand&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- IDENTIDADE VISUAL CARIMBOZANDO (Tropical & Alegre) --- */
         :root {
-            --bg-color: #f9d976; /* Amarelo Sol */
-            --card-glass: rgba(255, 255, 255, 0.92);
-            --item-hover: #f0f0f0;
-            --text-primary: #2d3436;
-            --text-secondary: #636e72;
-            --accent-color: #27ae60; /* Verde Palmeira */
-            --accent-hover: #2ecc71;
-            --detail-orange: #e67e22; /* Laranja Pôr do Sol */
+            --bg-gradient: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%); /* Fundo Suave */
+            --card-bg: #fffbf0; /* Creme Papel */
+            --stroke: #1a1a1a; /* Cor da Borda (Preto Quase Preto) */
+            --accent-green: #2ecc71; /* Verde Spotify Cartoon */
+            --accent-orange: #ff9f43; /* Laranja */
+            --accent-blue: #48dbfb; /* Azul para botões */
+            --stroke-width: 3px;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
             margin: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
-            /* Gradiente que remete ao horizonte da praia */
-            background-image: linear-gradient(180deg, #74b9ff 0%, #f9d976 70%, #fab1a0 100%);
+            font-family: 'Patrick Hand', cursive;
+            color: var(--stroke);
+            overflow: hidden; /* Evita rolagem dupla */
         }
 
-        /* Container Principal com bordas levemente irregulares para parecer desenho */
-        .main-wrapper {
-            display: flex;
-            flex-direction: row;
-            gap: 0;
-            width: 90%;
-            max-width: 900px;
-            height: 550px;
-            background-color: var(--card-glass);
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            border: 3px solid var(--text-primary); /* Bordas vincadas/estilo cartoon */
-        }
-
-        /* Barra Lateral */
-        .playlist-sidebar {
-            flex: 1;
-            background-color: rgba(255, 255, 255, 0.4);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border-right: 2px solid var(--text-primary);
-        }
-
-        .playlist-header {
-            font-family: 'Handlee', cursive;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--detail-orange);
+        /* --- LOGOTIPO ISPÓTIFAI (CSS PURO) --- */
+        .brand-header {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
+            margin-bottom: 20px;
+            transform: rotate(-2deg); /* Leve inclinação para estilo cartoon */
         }
 
-        .playlist-items {
-            list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1;
+        .spotify-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            border: var(--stroke-width) solid var(--stroke);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+        }
+        /* As ondinhas do logo */
+        .wave {
+            width: 60%; height: 4px; background: transparent; border-top: 3px solid var(--stroke); border-radius: 50%;
+        }
+        .w1 { width: 50%; } .w2 { width: 65%; } .w3 { width: 40%; }
+
+        .brand-text {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2rem;
+            color: var(--accent-orange);
+            -webkit-text-stroke: 1.5px var(--stroke); /* Contorno preto na letra */
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
         }
 
+        /* --- CARTÃO DO PLAYER --- */
+        .player-card {
+            background-color: var(--card-bg);
+            width: 340px;
+            padding: 25px;
+            border-radius: 30px;
+            border: var(--stroke-width) solid var(--stroke);
+            box-shadow: 12px 12px 0px rgba(0,0,0,0.15); /* Sombra dura cartoon */
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .cover-container {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #333;
+            border-radius: 20px;
+            border: var(--stroke-width) solid var(--stroke);
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+        }
+
+        .cover-container img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .song-info h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.6rem;
+            margin: 0;
+            color: var(--accent-green);
+            -webkit-text-stroke: 1px var(--stroke);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .song-info p {
+            font-size: 1.1rem;
+            margin: 5px 0 15px 0;
+            color: #666;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* --- BARRA DE PROGRESSO --- */
+        .progress-area {
+            height: 12px;
+            background: #fff;
+            border: 2px solid var(--stroke);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-orange);
+            border-right: 2px solid var(--stroke);
+        }
+        .timers {
+            display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: bold; margin-bottom: 20px;
+        }
+
+        /* --- CONTROLES --- */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .btn {
+            background: none; border: none; cursor: pointer; color: var(--stroke);
+            font-size: 1.4rem; transition: transform 0.1s;
+        }
+        .btn:hover { color: var(--accent-green); transform: scale(1.1); }
+        .btn:active { transform: scale(0.9); }
+        .btn.active { color: var(--accent-orange); }
+
+        .play-btn {
+            width: 70px; height: 70px;
+            background-color: var(--accent-green);
+            border: var(--stroke-width) solid var(--stroke);
+            border-radius: 50%;
+            font-size: 1.8rem;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 4px 4px 0px var(--stroke);
+            transition: all 0.2s;
+        }
+        .play-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--stroke);
+        }
+        .play-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px var(--stroke);
+        }
+
+        /* --- BOTÃO FLUTUANTE DA PLAYLIST (TOP RIGHT) --- */
+        .playlist-fab {
+            position: fixed;
+            top: 20px; right: 20px;
+            background: var(--card-bg);
+            border: var(--stroke-width) solid var(--stroke);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: flex; align-items: center; gap: 8px;
+            transition: 0.2s;
+        }
+        .playlist-fab:hover { transform: scale(1.05); }
+        .playlist-fab i { color: var(--accent-blue); }
+
+        /* --- MODAL DA PLAYLIST (OVERLAY) --- */
+        .playlist-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 99;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .playlist-overlay.show { opacity: 1; pointer-events: auto; }
+
+        .playlist-modal {
+            background: var(--card-bg);
+            width: 90%; max-width: 400px;
+            max-height: 70vh;
+            border: var(--stroke-width) solid var(--stroke);
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 10px 10px 0px var(--stroke);
+            display: flex; flex-direction: column;
+            transform: translateY(20px); transition: transform 0.3s;
+        }
+        .playlist-overlay.show .playlist-modal { transform: translateY(0); }
+
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px dashed var(--stroke); padding-bottom: 10px; margin-bottom: 10px;
+        }
+        .modal-title { font-family: 'Fredoka', sans-serif; font-size: 1.4rem; color: var(--accent-blue); -webkit-text-stroke: 0.5px var(--stroke); }
+        .close-btn { background: #ff7675; border: 2px solid var(--stroke); border-radius: 50%; width: 30px; height: 30px; cursor: pointer; color: white; font-weight: bold; }
+
+        .playlist-items { list-style: none; padding: 0; margin: 0; overflow-y: auto; }
         .playlist-items::-webkit-scrollbar { width: 6px; }
-        .playlist-items::-webkit-scrollbar-thumb { background-color: var(--detail-orange); border-radius: 10px; }
-
+        .playlist-items::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 4px; }
+        
         .playlist-item {
-            display: flex; align-items: center; padding: 12px; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-bottom: 8px;
-            border: 1px solid transparent;
+            padding: 12px; margin-bottom: 8px;
+            border: 2px solid transparent; border-radius: 12px;
+            cursor: pointer; display: flex; align-items: center; gap: 10px;
+            transition: 0.2s;
         }
-        .playlist-item:hover { background-color: var(--item-hover); border: 1px solid var(--detail-orange); }
-        .playlist-item.active-song { background-color: white; border: 2px solid var(--accent-color); transform: scale(1.02); }
-        
-        .item-icon { font-size: 0.8rem; color: var(--accent-color); margin-right: 12px; opacity: 0; }
-        .playlist-item.active-song .item-icon { opacity: 1; }
-        
-        .item-info { display: flex; flex-direction: column; }
-        .item-title { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); }
-        .item-artist { font-size: 0.8rem; color: var(--text-secondary); }
-
-        /* Área do Player */
-        .player-container {
-            width: 380px; padding: 30px; display: flex; flex-direction: column; justify-content: center; position: relative;
-            background: rgba(255,255,255,0.2);
+        .playlist-item:hover { background: #eee; border-color: #ddd; }
+        .playlist-item.active {
+            background: #e0f2f1; border: 2px solid var(--accent-green);
         }
+        .playlist-item i { font-size: 0.8rem; color: var(--accent-green); opacity: 0; }
+        .playlist-item.active i { opacity: 1; }
 
-        .cover-area {
-            width: 100%; aspect-ratio: 1; border-radius: 18px; overflow: hidden; 
-            box-shadow: 8px 8px 0px var(--text-primary); /* Sombra estilo pop-art */
-            margin-bottom: 25px; border: 3px solid var(--text-primary);
-        }
-        .cover-area img { width: 100%; height: 100%; object-fit: cover; }
-
-        .song-info-player { text-align: center; margin-bottom: 20px; }
-        .song-title-main { font-family: 'Handlee', cursive; font-size: 1.8rem; font-weight: 700; margin: 0; color: var(--detail-orange); }
-        .artist-name-main { color: var(--accent-color); font-weight: 700; font-size: 1rem; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Barra de Progresso */
-        .progress-area { height: 10px; width: 100%; background: #dfe6e9; border-radius: 50px; cursor: pointer; margin-bottom: 8px; border: 2px solid var(--text-primary); }
-        .progress-bar { height: 100%; width: 0%; background: var(--detail-orange); border-radius: 50px; position: relative; }
-        
-        .timers { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
-        
-        /* Controles */
-        .controls { display: flex; justify-content: space-between; align-items: center; }
-        .btn { background: none; border: none; color: var(--text-primary); font-size: 1.3rem; cursor: pointer; transition: 0.2s; }
-        .btn:hover { color: var(--detail-orange); transform: translateY(-3px); }
-        .btn.active { color: var(--detail-orange); }
-
-        .btn-main { 
-            width: 65px; height: 65px; background-color: var(--accent-color); color: white; border-radius: 50%; 
-            font-size: 1.6rem; display: flex; justify-content: center; align-items: center; 
-            box-shadow: 4px 4px 0px var(--text-primary); border: 2px solid var(--text-primary);
-        }
-        .btn-main:hover { background-color: var(--detail-orange); transform: scale(1.1); }
-
-        /* Popup de Letras */
+        /* --- POPUP LETRAS --- */
         .lyrics-popup {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color); z-index: 10; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; opacity: 0; pointer-events: none; 
-            transition: 0.3s; padding: 30px; box-sizing: border-box; border-radius: 20px;
+            background: rgba(255,251,240, 0.95);
+            border-radius: 25px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10; padding: 20px; box-sizing: border-box;
+            opacity: 0; pointer-events: none; transition: 0.3s;
         }
         .lyrics-popup.show { opacity: 1; pointer-events: auto; }
-        .lyrics-content {
-            font-family: 'Handlee', cursive; text-align: center; font-size: 1.2rem; line-height: 1.6; color: var(--text-primary);
-            overflow-y: auto; max-height: 80%; width: 100%; white-space: pre-wrap;
+        .lyrics-text {
+            width: 100%; height: 80%; overflow-y: auto; text-align: center;
+            font-size: 1.1rem; line-height: 1.6; white-space: pre-wrap; color: var(--stroke);
         }
-        .close-lyrics { margin-top: 20px; background: var(--text-primary); border: none; color: white; padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: 700; }
+        .close-lyrics {
+            margin-top: 10px; background: var(--stroke); color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-family: 'Fredoka';
+        }
 
-        /* Mobile */
-        @media (max-width: 850px) {
-            .main-wrapper { flex-direction: column; height: auto; border-radius: 0; border: none; width: 100%; }
-            .player-container { width: 100%; order: 1; box-sizing: border-box; }
-            .playlist-sidebar { width: 100%; order: 2; height: 350px; border-right: none; border-top: 3px solid var(--text-primary); }
-        }
     </style>
 </head>
 <body>
 
-<div class="main-wrapper">
-    <div class="playlist-sidebar">
-        <div class="playlist-header"><i class="fas fa-compact-disc"></i> Álbum: A vida é o que é!</div>
-        <ul class="playlist-items" id="playlist-ul"></ul>
+<div class="playlist-fab" id="playlist-btn">
+    <i class="fas fa-list-music"></i> Minhas Músicas
+</div>
+
+<div class="playlist-overlay" id="playlist-overlay">
+    <div class="playlist-modal">
+        <div class="modal-header">
+            <span class="modal-title">Escolha o Som</span>
+            <button class="close-btn" id="close-playlist">X</button>
+        </div>
+        <ul class="playlist-items" id="playlist-ul">
+            </ul>
+    </div>
+</div>
+
+<div class="player-card" id="player">
+    
+    <div class="brand-header">
+        <div class="spotify-icon">
+            <div class="wave w1"></div>
+            <div class="wave w2"></div>
+            <div class="wave w3"></div>
+        </div>
+        <div class="brand-text">Ispótifai</div>
     </div>
 
-    <div class="player-container" id="player">
+    <div class="cover-container">
         <div class="lyrics-popup" id="lyrics-popup">
-            <div class="lyrics-content" id="lyrics-text">Vibrações positivas...</div>
-            <button class="close-lyrics" id="close-lyrics">Voltar para o Som</button>
+            <div class="lyrics-text" id="lyrics-text">Carregando...</div>
+            <button class="close-lyrics" id="close-lyrics">Fechar Letra</button>
         </div>
+        <img src="" alt="Capa" id="cover">
+    </div>
 
-        <div class="cover-area"><img src="" alt="Capa Carimbozando" id="cover"></div>
+    <div class="song-info">
+        <h2 id="title">Carregando...</h2>
+        <p id="artist">Carimbozando</p>
+    </div>
 
-        <div class="song-info-player">
-            <h2 class="song-title-main" id="title">Carregando...</h2>
-            <p class="artist-name-main" id="artist">CARIMBOZANDO</p>
-        </div>
+    <div class="progress-area" id="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="timers">
+        <span id="current-time">0:00</span>
+        <span id="duration">0:00</span>
+    </div>
 
-        <div class="progress-area" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="timers">
-            <span id="current-time">0:00</span>
-            <span id="duration">0:00</span>
-        </div>
-
-        <div class="controls">
-            <button class="btn" id="lyrics-btn" title="Letra"><i class="fas fa-quote-left"></i></button>
-            <button class="btn" id="prev"><i class="fas fa-backward"></i></button>
-            <button class="btn btn-main" id="play"><i class="fas fa-play"></i></button>
-            <button class="btn" id="next"><i class="fas fa-forward"></i></button>
-            <button class="btn" id="shuffle" title="Aleatório"><i class="fas fa-random"></i></button>
-        </div>
+    <div class="controls">
+        <button class="btn" id="lyrics-btn" title="Ver Letra"><i class="fas fa-comment-dots"></i></button>
+        <button class="btn" id="prev"><i class="fas fa-step-backward"></i></button>
+        <button class="play-btn" id="play"><i class="fas fa-play"></i></button>
+        <button class="btn" id="next"><i class="fas fa-step-forward"></i></button>
+        <button class="btn" id="shuffle"><i class="fas fa-random"></i></button>
     </div>
 </div>
 
 <audio id="audio"></audio>
 
 <script>
+    // --- DADOS DAS MÚSICAS ---
     const songs = [
         {
             "title": "O Ofício de Ser",
@@ -230,16 +355,14 @@
         }
     ];
 
+    // --- VARIÁVEIS DO SISTEMA ---
     const audio = document.getElementById('audio');
     const playBtn = document.getElementById('play');
     const prevBtn = document.getElementById('prev');
     const nextBtn = document.getElementById('next');
     const shuffleBtn = document.getElementById('shuffle');
-    const lyricsBtn = document.getElementById('lyrics-btn');
-    const lyricsPopup = document.getElementById('lyrics-popup');
-    const lyricsText = document.getElementById('lyrics-text');
-    const closeLyricsBtn = document.getElementById('close-lyrics');
     
+    // Elementos da UI
     const titleEl = document.getElementById('title');
     const artistEl = document.getElementById('artist');
     const coverEl = document.getElementById('cover');
@@ -247,27 +370,44 @@
     const progressBar = document.getElementById('progress-bar');
     const currTimeEl = document.getElementById('current-time');
     const durTimeEl = document.getElementById('duration');
+    
+    // Playlist Modal Elements
     const playlistUl = document.getElementById('playlist-ul');
+    const playlistBtn = document.getElementById('playlist-btn');
+    const playlistOverlay = document.getElementById('playlist-overlay');
+    const closePlaylist = document.getElementById('close-playlist');
 
+    // Lyrics Elements
+    const lyricsBtn = document.getElementById('lyrics-btn');
+    const lyricsPopup = document.getElementById('lyrics-popup');
+    const lyricsText = document.getElementById('lyrics-text');
+    const closeLyricsBtn = document.getElementById('close-lyrics');
+
+    // Configurações
     const defaultCover = "musicas/album_cover.png";
     let songIndex = 0;
     let isShuffle = false;
 
+    // --- FUNÇÕES DA PLAYLIST (MODAL) ---
     function renderPlaylist() {
         playlistUl.innerHTML = "";
         songs.forEach((song, index) => {
             const li = document.createElement('li');
             li.classList.add('playlist-item');
+            
             li.addEventListener('click', () => {
                 songIndex = index;
                 loadSong(songs[songIndex]);
                 playSong();
+                // Fecha o modal ao escolher
+                playlistOverlay.classList.remove('show');
             });
+
             li.innerHTML = `
-                <div class="item-icon"><i class="fas fa-play"></i></div>
-                <div class="item-info">
-                    <span class="item-title">${song.title}</span>
-                    <span class="item-artist">${song.artist}</span>
+                <i class="fas fa-music"></i>
+                <div style="flex-grow:1">
+                    <div style="font-weight:bold; font-family:'Fredoka'">${song.title}</div>
+                    <div style="font-size:0.8rem; color:#666">${song.artist}</div>
                 </div>
             `;
             playlistUl.appendChild(li);
@@ -275,71 +415,104 @@
     }
 
     function updatePlaylistActiveState() {
-        document.querySelectorAll('.playlist-item').forEach((item, index) => {
-            index === songIndex ? item.classList.add('active-song') : item.classList.remove('active-song');
+        const items = document.querySelectorAll('.playlist-item');
+        items.forEach((item, index) => {
+            if (index === songIndex) {
+                item.classList.add('active');
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                item.classList.remove('active');
+            }
         });
     }
 
+    // --- ABRIR/FECHAR PLAYLIST ---
+    playlistBtn.addEventListener('click', () => {
+        playlistOverlay.classList.add('show');
+    });
+    
+    closePlaylist.addEventListener('click', () => {
+        playlistOverlay.classList.remove('show');
+    });
+
+    // Fechar ao clicar fora
+    playlistOverlay.addEventListener('click', (e) => {
+        if(e.target === playlistOverlay) playlistOverlay.classList.remove('show');
+    });
+
+    // --- LETRAS ---
     function fetchLyrics(filePath) {
-        lyricsText.innerText = "Buscando a letra...";
+        lyricsText.innerText = "Carregando letra...";
         fetch(filePath)
-            .then(r => r.text())
+            .then(r => {
+                if(!r.ok) throw new Error("Erro");
+                return r.text();
+            })
             .then(t => lyricsText.innerText = t)
-            .catch(() => lyricsText.innerText = "Letra não encontrada para esta canção.");
+            .catch(() => lyricsText.innerText = "Letra não encontrada :(");
     }
 
+    // --- PLAYER CORE ---
     function loadSong(song) {
         titleEl.innerText = song.title;
         artistEl.innerText = song.artist;
         audio.src = encodeURI(song.src);
         coverEl.src = song.cover || defaultCover;
+        coverEl.onerror = function() { this.src = defaultCover; };
+        
         fetchLyrics(song.lyricsFile);
         updatePlaylistActiveState();
     }
 
     function playSong() {
-        document.getElementById('player').classList.add('playing');
         playBtn.innerHTML = '<i class="fas fa-pause"></i>';
         audio.play();
     }
 
     function pauseSong() {
-        document.getElementById('player').classList.remove('playing');
         playBtn.innerHTML = '<i class="fas fa-play"></i>';
         audio.pause();
     }
 
     playBtn.addEventListener('click', () => {
-        const isPlaying = document.getElementById('player').classList.contains('playing');
-        isPlaying ? pauseSong() : playSong();
+        audio.paused ? playSong() : pauseSong();
     });
 
-    lyricsBtn.addEventListener('click', () => lyricsPopup.classList.add('show'));
-    closeLyricsBtn.addEventListener('click', () => lyricsPopup.classList.remove('show'));
-
+    // --- NAVEGAÇÃO ---
     function nextSong() {
-        songIndex = isShuffle ? Math.floor(Math.random() * songs.length) : (songIndex + 1) % songs.length;
+        if (isShuffle) {
+            let newIndex;
+            do { newIndex = Math.floor(Math.random() * songs.length); } 
+            while (newIndex === songIndex && songs.length > 1);
+            songIndex = newIndex;
+        } else {
+            songIndex++;
+            if (songIndex > songs.length - 1) songIndex = 0;
+        }
         loadSong(songs[songIndex]);
         playSong();
     }
 
     function prevSong() {
-        songIndex = (songIndex - 1 + songs.length) % songs.length;
+        songIndex--;
+        if (songIndex < 0) songIndex = songs.length - 1;
         loadSong(songs[songIndex]);
         playSong();
     }
 
-    prevBtn.addEventListener('click', prevSong);
     nextBtn.addEventListener('click', nextSong);
+    prevBtn.addEventListener('click', prevSong);
+    
     shuffleBtn.addEventListener('click', () => {
         isShuffle = !isShuffle;
         shuffleBtn.classList.toggle('active', isShuffle);
     });
 
+    // --- PROGRESS BAR ---
     audio.addEventListener('timeupdate', (e) => {
         const { duration, currentTime } = e.srcElement;
-        const progressPercent = (currentTime / duration) * 100;
-        progressBar.style.width = `${progressPercent}%`;
+        const percent = (currentTime / duration) * 100;
+        progressBar.style.width = `${percent}%`;
         
         if(duration) {
             const dMin = Math.floor(duration / 60);
@@ -354,13 +527,20 @@
     progressContainer.addEventListener('click', function(e) {
         const width = this.clientWidth;
         const clickX = e.offsetX;
-        audio.currentTime = (clickX / width) * audio.duration;
+        const duration = audio.duration;
+        audio.currentTime = (clickX / width) * duration;
     });
-    
+
     audio.addEventListener('ended', nextSong);
 
+    // --- LETRAS POPUP ---
+    lyricsBtn.addEventListener('click', () => lyricsPopup.classList.add('show'));
+    closeLyricsBtn.addEventListener('click', () => lyricsPopup.classList.remove('show'));
+
+    // Init
     renderPlaylist();
     loadSong(songs[songIndex]);
+
 </script>
 </body>
 </html>
