@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2ecc71">
     <meta name="description" content="Ouça Carimbozando com letras, playlist, modo app e instalação na tela inicial.">
+    <meta name="application-name" content="Carimbozando">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Ispótifai - Carimbozando</title>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <meta name="apple-mobile-web-app-title" content="Carimbozando">
     <meta name="mobile-web-app-capable" content="yes">
 
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
@@ -337,6 +339,7 @@ const toastEl = document.getElementById('toast');
 const installOverlay = document.getElementById('install-overlay');
 const closeInstallBtn = document.getElementById('close-install');
 const installNowBtn = document.getElementById('install-now-btn');
+const installHelpAndroid = document.getElementById('install-help-android');
 
 const defaultCover = 'musicas/album_cover.png';
 let songIndex = 0;
@@ -344,6 +347,7 @@ let isShuffle = false;
 let deferredPrompt = null;
 let toastTimer = null;
 let repeatMode = 'off';
+let installCheckTimer = null;
 
 function showToast(message, icon = 'fa-solid fa-circle-check') {
     toastEl.innerHTML = `<i class="${icon}" aria-hidden="true"></i><span>${message}</span>`;
@@ -605,7 +609,34 @@ function closeInstallModal() {
     installOverlay.setAttribute('aria-hidden', 'true');
 }
 
+function isStandaloneMode() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function setInstallButtonState(state = 'ready') {
+    if (state === 'installed') {
+        installBtn.innerHTML = '<i class="fa-solid fa-mobile-screen-button"></i><span>App instalado</span>';
+        installBtn.disabled = true;
+        installBtn.style.opacity = '.75';
+        return;
+    }
+    installBtn.disabled = false;
+    installBtn.style.opacity = '1';
+    if (state === 'available') {
+        installBtn.innerHTML = '<i class="fa-solid fa-download"></i><span>Instalar app</span>';
+        installHelpAndroid.innerHTML = 'Toque em <b>Instalar app</b>. O Chrome já liberou a instalação neste aparelho.';
+        return;
+    }
+    installBtn.innerHTML = '<i class="fa-solid fa-download"></i><span>Como instalar</span>';
+    installHelpAndroid.innerHTML = 'No Chrome Android, abra o menu de três pontos e procure <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>. Depois de publicar a nova versão, feche e abra o site uma vez para o navegador reconhecer o app.';
+}
+
 async function tryInstallPrompt() {
+    if (isStandaloneMode()) {
+        setInstallButtonState('installed');
+        showToast('O app já está instalado neste aparelho.', 'fa-solid fa-circle-check');
+        return;
+    }
     if (!deferredPrompt) {
         openInstallModal();
         return;
@@ -613,17 +644,19 @@ async function tryInstallPrompt() {
     deferredPrompt.prompt();
     const choice = await deferredPrompt.userChoice;
     if (choice.outcome === 'accepted') {
-        showToast('App instalado com sucesso.', 'fa-solid fa-download');
+        showToast('Instalação iniciada. Confira o ícone na tela inicial.', 'fa-solid fa-download');
     } else {
         showToast('Instalação cancelada por agora.', 'fa-solid fa-mobile-screen');
     }
     deferredPrompt = null;
+    setInstallButtonState('ready');
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    showToast('Seu navegador liberou a instalação do app.', 'fa-solid fa-mobile-screen-button');
+    setInstallButtonState('available');
+    showToast('Seu celular liberou a instalação do app.', 'fa-solid fa-mobile-screen-button');
 });
 
 installBtn.addEventListener('click', tryInstallPrompt);
@@ -635,15 +668,24 @@ window.addEventListener('appinstalled', () => {
     showToast('Carimbozando instalado no seu aparelho.', 'fa-solid fa-circle-check');
     closeInstallModal();
     deferredPrompt = null;
+    setInstallButtonState('installed');
 });
 
-if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-    installBtn.innerHTML = '<i class="fa-solid fa-mobile-screen-button"></i><span>App instalado</span>';
+if (isStandaloneMode()) {
+    setInstallButtonState('installed');
+} else {
+    setInstallButtonState('ready');
 }
 
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    window.addEventListener('load', async () => {
+        try {
+            await navigator.serviceWorker.register('./service-worker.js');
+        } catch {}
+        clearTimeout(installCheckTimer);
+        installCheckTimer = setTimeout(() => {
+            if (!deferredPrompt && !isStandaloneMode()) setInstallButtonState('ready');
+        }, 1200);
     });
 }
 
