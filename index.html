@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2ecc71">
-    <meta name="description" content="Ouça Carimbozando em tempo real, com letras, playlist e experiência instalável como app.">
+    <meta name="description" content="Ouça Carimbozando com letras, playlist, modo app e instalação na tela inicial.">
     <title>Ispótifai - Carimbozando</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Carimbozando">
+    <meta name="mobile-web-app-capable" content="yes">
 
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -66,6 +71,19 @@
         .install-chip { cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; }
         .install-chip:hover, .install-chip:focus-visible { transform: translateY(-2px); box-shadow: 7px 7px 0 rgba(0,0,0,0.12); outline: none; }
         .install-chip.hidden { display: none; }
+        .repeat-one {
+            position: relative;
+        }
+        .repeat-one::after {
+            content: "1";
+            position: absolute;
+            right: 6px;
+            top: 3px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: .62rem;
+            font-weight: 700;
+            color: currentColor;
+        }
         @keyframes ginga { 0% { transform: rotate(-1.5deg) scale(1); } 50% { transform: rotate(1.5deg) scale(1.015); } 100% { transform: rotate(-1.5deg) scale(1); } }
         @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(46,204,113,0.12); } 50% { box-shadow: 0 0 0 12px rgba(46,204,113,0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
@@ -195,8 +213,7 @@
 
 <div class="layout-container">
     <div class="floating-badges">
-        <div class="floating-chip"><i class="fa-solid fa-headphones-simple"></i><span>Som em tempo real</span></div>
-        <button class="floating-chip install-chip hidden" id="install-btn" type="button"><i class="fa-solid fa-download"></i><span>Instalar app</span></button>
+        <button class="floating-chip install-chip" id="install-btn" type="button"><i class="fa-solid fa-download"></i><span>Instalar app</span></button>
     </div>
 
     <div class="player-card" id="player">
@@ -240,6 +257,7 @@
             <button class="play-btn" id="play" title="Tocar/Pausar" aria-label="Tocar ou pausar"><i class="fas fa-play"></i></button>
             <button class="btn" id="next" title="Próxima" aria-label="Próxima música"><i class="fas fa-step-forward"></i></button>
             <button class="btn" id="shuffle" title="Embaralhar" aria-label="Embaralhar músicas"><i class="fas fa-random"></i></button>
+            <button class="btn" id="repeat" title="Repeat" aria-label="Repetir músicas"><i class="fas fa-repeat"></i></button>
         </div>
     </div>
 
@@ -249,7 +267,31 @@
     </div>
 </div>
 
+
+<div class="playlist-overlay" id="install-overlay" aria-hidden="true">
+    <div class="playlist-modal" role="dialog" aria-modal="true" aria-labelledby="install-modal-title">
+        <div class="modal-header">
+            <span class="modal-title" id="install-modal-title">Instalar no celular</span>
+            <button class="close-btn" id="close-install" aria-label="Fechar instalação">X</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; color:#222; line-height:1.5;">
+            <div style="padding:12px; border:2px solid var(--stroke); border-radius:18px; background:#fff;">
+                <strong style="display:block; font-family:'Fredoka', sans-serif; margin-bottom:6px;">Android / Chrome</strong>
+                <span id="install-help-android">Toque em <b>Instalar app</b>. Se o navegador ainda não liberar, abra o menu de três pontos e procure <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</span>
+            </div>
+            <div style="padding:12px; border:2px solid var(--stroke); border-radius:18px; background:#fff;">
+                <strong style="display:block; font-family:'Fredoka', sans-serif; margin-bottom:6px;">iPhone / Safari</strong>
+                <span>Abra no Safari, toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b>.</span>
+            </div>
+            <button class="secondary-action" id="install-now-btn" type="button" style="width:100%; justify-content:center;">
+                <i class="fa-solid fa-download"></i> Tentar instalar agora
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="toast" id="toast"></div>
+
 <audio id="audio" preload="metadata"></audio>
 
 <script>
@@ -261,11 +303,16 @@ const songs = [
     { title: "O Norte é o Adiante", artist: "Carimbozando", src: "musicas/O Norte é o Adiante.mp3", cover: "musicas/album_cover.png", lyricsFile: "musicas/O Norte é o Adiante.txt" }
 ];
 
+const optionalSongs = [
+    { title: "Onde a Voz Mora", artist: "Carimbozando", src: "musicas/Onde a Voz Mora.mp3", cover: "musicas/album_cover.png", lyricsFile: "musicas/Onde a Voz Mora.txt" }
+];
+
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('play');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
 const shuffleBtn = document.getElementById('shuffle');
+const repeatBtn = document.getElementById('repeat');
 const titleEl = document.getElementById('title');
 const artistEl = document.getElementById('artist');
 const coverEl = document.getElementById('cover');
@@ -287,18 +334,34 @@ const closeLyricsBtn = document.getElementById('close-lyrics');
 const shareBtn = document.getElementById('share-btn');
 const installBtn = document.getElementById('install-btn');
 const toastEl = document.getElementById('toast');
+const installOverlay = document.getElementById('install-overlay');
+const closeInstallBtn = document.getElementById('close-install');
+const installNowBtn = document.getElementById('install-now-btn');
 
 const defaultCover = 'musicas/album_cover.png';
 let songIndex = 0;
 let isShuffle = false;
 let deferredPrompt = null;
 let toastTimer = null;
+let repeatMode = 'off';
 
 function showToast(message, icon = 'fa-solid fa-circle-check') {
     toastEl.innerHTML = `<i class="${icon}" aria-hidden="true"></i><span>${message}</span>`;
     toastEl.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
+}
+
+
+async function attachOptionalSongs() {
+    for (const song of optionalSongs) {
+        try {
+            const response = await fetch(encodeURI(song.src), { method: 'HEAD' });
+            if (response.ok) songs.push(song);
+        } catch {}
+    }
+    renderPlaylist();
+    updateMeta();
 }
 
 function renderPlaylist() {
@@ -366,7 +429,15 @@ async function fetchLyrics(filePath) {
 
 function updateMeta() {
     nowPlayingEl.textContent = `${songIndex + 1} de ${songs.length}`;
-    playModeEl.textContent = isShuffle ? 'Embaralhado' : 'Sequencial';
+    if (isShuffle) {
+        playModeEl.textContent = 'Embaralhado';
+    } else if (repeatMode === 'one') {
+        playModeEl.textContent = 'Repeat faixa';
+    } else if (repeatMode === 'all') {
+        playModeEl.textContent = 'Repeat álbum';
+    } else {
+        playModeEl.textContent = 'Sequencial';
+    }
     coverBadgeTextEl.textContent = `Faixa ${songIndex + 1}`;
 }
 
@@ -441,6 +512,15 @@ shuffleBtn.addEventListener('click', () => {
     showToast(isShuffle ? 'Modo embaralhado ativado.' : 'Modo sequencial ativado.', 'fa-solid fa-shuffle');
 });
 
+repeatBtn.addEventListener('click', () => {
+    repeatMode = repeatMode === 'off' ? 'all' : repeatMode === 'all' ? 'one' : 'off';
+    repeatBtn.classList.toggle('active', repeatMode !== 'off');
+    repeatBtn.classList.toggle('repeat-one', repeatMode === 'one');
+    updateMeta();
+    const label = repeatMode === 'all' ? 'Repeat do álbum ativado.' : repeatMode === 'one' ? 'Repeat da faixa ativado.' : 'Repeat desativado.';
+    showToast(label, 'fa-solid fa-repeat');
+});
+
 audio.addEventListener('timeupdate', (e) => {
     const { duration, currentTime } = e.target;
     const percent = duration ? (currentTime / duration) * 100 : 0;
@@ -462,7 +542,29 @@ progressContainer.addEventListener('click', function(e) {
     audio.currentTime = (clickX / width) * duration;
 });
 
-audio.addEventListener('ended', nextSong);
+audio.addEventListener('ended', () => {
+    if (repeatMode === 'one') {
+        audio.currentTime = 0;
+        playSong();
+        return;
+    }
+    if (repeatMode === 'all') {
+        nextSong();
+        return;
+    }
+    if (isShuffle) {
+        nextSong();
+        return;
+    }
+    if (songIndex < songs.length - 1) {
+        nextSong();
+    } else {
+        pauseSong();
+        audio.currentTime = 0;
+        progressBar.style.width = '0%';
+        currTimeEl.innerText = '0:00';
+    }
+});
 lyricsBtn.addEventListener('click', () => lyricsPopup.classList.add('show'));
 closeLyricsBtn.addEventListener('click', () => lyricsPopup.classList.remove('show'));
 
@@ -476,6 +578,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closePlaylistModal();
         lyricsPopup.classList.remove('show');
+        closeInstallModal();
     }
 });
 
@@ -493,30 +596,50 @@ shareBtn.addEventListener('click', async () => {
     } catch {}
 });
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.classList.remove('hidden');
-    showToast('Agora você pode instalar o app.', 'fa-solid fa-mobile-screen-button');
-});
+function openInstallModal() {
+    installOverlay.classList.add('show');
+    installOverlay.setAttribute('aria-hidden', 'false');
+}
+function closeInstallModal() {
+    installOverlay.classList.remove('show');
+    installOverlay.setAttribute('aria-hidden', 'true');
+}
 
-installBtn.addEventListener('click', async () => {
+async function tryInstallPrompt() {
     if (!deferredPrompt) {
-        showToast('No iPhone, use Compartilhar e depois Adicionar à Tela de Início.', 'fa-solid fa-mobile-screen');
+        openInstallModal();
         return;
     }
     deferredPrompt.prompt();
     const choice = await deferredPrompt.userChoice;
-    if (choice.outcome === 'accepted') showToast('App instalado com sucesso.', 'fa-solid fa-download');
+    if (choice.outcome === 'accepted') {
+        showToast('App instalado com sucesso.', 'fa-solid fa-download');
+    } else {
+        showToast('Instalação cancelada por agora.', 'fa-solid fa-mobile-screen');
+    }
     deferredPrompt = null;
-    installBtn.classList.add('hidden');
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showToast('Seu navegador liberou a instalação do app.', 'fa-solid fa-mobile-screen-button');
 });
+
+installBtn.addEventListener('click', tryInstallPrompt);
+installNowBtn.addEventListener('click', tryInstallPrompt);
+closeInstallBtn.addEventListener('click', closeInstallModal);
+installOverlay.addEventListener('click', (e) => { if (e.target === installOverlay) closeInstallModal(); });
 
 window.addEventListener('appinstalled', () => {
     showToast('Carimbozando instalado no seu aparelho.', 'fa-solid fa-circle-check');
-    installBtn.classList.add('hidden');
+    closeInstallModal();
     deferredPrompt = null;
 });
+
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    installBtn.innerHTML = '<i class="fa-solid fa-mobile-screen-button"></i><span>App instalado</span>';
+}
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -524,8 +647,9 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-renderPlaylist();
 loadSong(songs[songIndex]);
+attachOptionalSongs();
+renderPlaylist();
 </script>
 </body>
 </html>
