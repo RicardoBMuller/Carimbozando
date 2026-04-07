@@ -1,34 +1,32 @@
-const CACHE_NAME = 'ispotifai-carimbozando-v4';
+const CACHE_NAME = 'carimbozando-pwa-v7';
 const APP_SHELL = [
-  './',
-  './index.html',
-  './manifest.webmanifest',
-  './service-worker.js',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/apple-touch-icon.png',
-  './musicas/album_cover.png',
-  './musicas/A%20Dona%20do%20Mundo.mp3',
-  './musicas/A%20Dona%20do%20Mundo.txt',
-  './musicas/O%20Norte%20%C3%A9%20o%20Adiante.mp3',
-  './musicas/O%20Norte%20%C3%A9%20o%20Adiante.txt',
-  './musicas/O%20Of%C3%ADcio%20de%20Ser.mp3',
-  './musicas/O%20Of%C3%ADcio%20de%20Ser.txt',
-  './musicas/O%20Rio%20que%20eu%20Era.mp3',
-  './musicas/O%20Rio%20que%20eu%20Era.txt',
-  './musicas/Onde%20o%20Sol%20se%20Demora.mp3',
-  './musicas/Onde%20o%20Sol%20se%20Demora.txt',
-  './musicas/Onde%20a%20Voz%20Mora.txt'
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./service-worker.js",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/apple-touch-icon.png",
+  "./icons/favicon-64.png",
+  "./musicas/a-dona-do-mundo.mp3",
+  "./musicas/a-dona-do-mundo.txt",
+  "./musicas/album-cover.png",
+  "./musicas/o-norte-e-o-adiante.mp3",
+  "./musicas/o-norte-e-o-adiante.txt",
+  "./musicas/o-oficio-de-ser.mp3",
+  "./musicas/o-oficio-de-ser.txt",
+  "./musicas/o-rio-que-eu-era.mp3",
+  "./musicas/o-rio-que-eu-era.txt",
+  "./musicas/onde-a-voz-mora.mp3",
+  "./musicas/onde-a-voz-mora.txt",
+  "./musicas/onde-o-sol-se-demora.mp3",
+  "./musicas/onde-o-sol-se-demora.txt"
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    await Promise.all(APP_SHELL.map(async (url) => {
-      try {
-        await cache.add(url);
-      } catch {}
-    }));
+    await cache.addAll(APP_SHELL);
     await self.skipWaiting();
   })());
 });
@@ -44,21 +42,19 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
 
-  const isSameOrigin = new URL(request.url).origin === self.location.origin;
-  if (!isSameOrigin) return;
-
-  const isAudio = request.destination === 'audio' || request.url.includes('/musicas/');
+  const isAudio = request.destination === 'audio' || url.pathname.includes('/musicas/');
 
   if (isAudio) {
     event.respondWith((async () => {
-      const cached = await caches.match(request);
+      const cache = await caches.open(CACHE_NAME);
+      const cached = await cache.match(request);
       if (cached) return cached;
       try {
         const response = await fetch(request);
-        const cloned = response.clone();
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(request, cloned);
+        cache.put(request, response.clone());
         return response;
       } catch {
         return new Response('', { status: 404, statusText: 'Offline' });
@@ -68,16 +64,15 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith((async () => {
-    const cached = await caches.match(request);
+    const cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(request);
     if (cached) return cached;
     try {
       const response = await fetch(request);
-      const cloned = response.clone();
-      const cache = await caches.open(CACHE_NAME);
-      cache.put(request, cloned);
+      cache.put(request, response.clone());
       return response;
     } catch {
-      return caches.match('./index.html');
+      return cache.match('./index.html');
     }
   })());
 });
