@@ -1,344 +1,922 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#ff8a4c">
-  <meta name="description" content="Player oficial do Carimbozando com visual cartoon, glassmorfismo, letras, playlist e instalação como app.">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Carimbozando">
-  <meta name="mobile-web-app-capable" content="yes">
-  <title>Carimbozando</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2ecc71">
+    <meta name="description" content="Ouça Carimbozando com letras, playlist, modo app e instalação na tela inicial.">
+    <meta name="application-name" content="Carimbozando">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Carimbozando">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Ispótifai – Carimbozando</title>
 
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg-1: #fff3d2;
-      --bg-2: #ffbe98;
-      --bg-3: #ff8a4c;
-      --bg-4: #ff5f8f;
-      --mint: #59e1bf;
-      --sky: #78dcff;
-      --ink: #2f2240;
-      --ink-soft: rgba(47, 34, 64, 0.72);
-      --glass: rgba(255, 255, 255, 0.2);
-      --glass-strong: rgba(255, 255, 255, 0.3);
-      --line: rgba(255,255,255,0.34);
-      --shadow: 0 26px 70px rgba(74, 33, 29, 0.28);
-      --radius-xl: 34px;
-      --radius-lg: 26px;
-      --radius-md: 18px;
-      --stroke: 2px solid rgba(255,255,255,0.26);
-      --max: 1240px;
-    }
-    * { box-sizing: border-box; }
-    html, body { min-height: 100%; }
-    body {
-      margin: 0;
-      font-family: "Nunito", system-ui, sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 15% 18%, rgba(255,255,255,0.55), transparent 20%),
-        radial-gradient(circle at 88% 20%, rgba(255,255,255,0.34), transparent 18%),
-        radial-gradient(circle at 78% 82%, rgba(89,225,191,0.22), transparent 18%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2) 30%, var(--bg-3) 68%, var(--bg-4));
-      overflow-x: hidden;
-      -webkit-tap-highlight-color: transparent;
-    }
-    body::before, body::after {
-      content: "";
-      position: fixed;
-      width: 32rem; height: 32rem; border-radius: 50%; filter: blur(16px); z-index: 0; pointer-events: none; opacity: 0.32; animation: floatBlob 12s ease-in-out infinite;
-    }
-    body::before { background: radial-gradient(circle, rgba(120,220,255,0.95), rgba(120,220,255,0)); left: -8rem; top: -8rem; }
-    body::after { background: radial-gradient(circle, rgba(89,225,191,0.88), rgba(89,225,191,0)); right: -10rem; bottom: -10rem; animation-delay: -5s; }
-    @keyframes floatBlob { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(18px,-20px,0) scale(1.06); } }
-    @keyframes popIn { from { opacity: 0; transform: translateY(18px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes pulseDisc { 0%,100% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(4deg) scale(1.015); } }
-    @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
-    @keyframes equalize { 0%,100% { transform: scaleY(.45); } 30% { transform: scaleY(1); } 60% { transform: scaleY(.7); } }
-    .shell { position: relative; z-index: 1; width: min(calc(100% - 28px), var(--max)); margin: 0 auto; min-height: 100vh; padding: max(18px, env(safe-area-inset-top)) 0 max(24px, env(safe-area-inset-bottom)); display: grid; grid-template-rows: auto 1fr; gap: 18px; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px; animation: popIn .55s ease both; }
-    .brand-pill, .action-pill { border: var(--stroke); background: var(--glass-strong); backdrop-filter: blur(18px) saturate(140%); box-shadow: var(--shadow); border-radius: 999px; min-height: 58px; }
-    .brand-pill { display: inline-flex; align-items: center; gap: 14px; padding: 10px 18px 10px 12px; overflow: hidden; }
-    .brand-mark { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex: 0 0 auto; border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 8px 18px rgba(0,0,0,0.16); }
-    .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
-    .brand-copy { display: flex; flex-direction: column; line-height: 1; }
-    .brand-copy strong { font-family: "Baloo 2", cursive; font-weight: 800; font-size: 1.42rem; letter-spacing: 0.02em; }
-    .brand-copy span { font-size: .92rem; color: var(--ink-soft); margin-top: 2px; }
-    .top-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-    .action-pill { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 18px; font-weight: 800; color: var(--ink); cursor: pointer; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; white-space: nowrap; }
-    .action-pill:hover, .action-pill:focus-visible { transform: translateY(-2px); background: rgba(255,255,255,.38); outline: none; }
-    .action-pill.primary { background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.16)), linear-gradient(135deg, rgba(89,225,191,0.55), rgba(120,220,255,0.55)); }
-    .action-pill[disabled] { cursor: default; opacity: .7; }
-    .content { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 18px; align-items: stretch; }
-    .glass-card { border: var(--stroke); background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.16)); backdrop-filter: blur(22px) saturate(145%); box-shadow: var(--shadow); border-radius: var(--radius-xl); position: relative; overflow: hidden; animation: popIn .6s ease both; }
-    .glass-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.18), transparent 38%, rgba(255,255,255,.08)); pointer-events: none; }
-    .player-panel { padding: 22px; display: grid; grid-template-rows: auto auto auto 1fr auto; gap: 18px; min-height: 0; }
-    .hero-strip { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; padding: 14px; border-radius: 24px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.22); }
-    .hero-cover { position: relative; aspect-ratio: 1; border-radius: 24px; overflow: hidden; box-shadow: 0 14px 28px rgba(0,0,0,.16); animation: pulseDisc 6s ease-in-out infinite; isolation: isolate; }
-    .hero-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .hero-cover::after { content: ""; position: absolute; inset: auto 12px 12px auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(47,34,64,.82); box-shadow: inset 0 0 0 8px rgba(255,255,255,.15), 0 8px 20px rgba(0,0,0,.24); }
-    .is-playing .hero-cover::after { animation: spin 5.2s linear infinite; }
-    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.34); width: fit-content; font-size: .86rem; font-weight: 800; color: var(--ink-soft); margin-bottom: 10px; }
-    .song-title { font-family: "Baloo 2", cursive; font-size: clamp(2rem, 2.8vw, 2.8rem); line-height: .95; margin: 0; }
-    .song-artist { margin: 6px 0 0; font-size: 1rem; font-weight: 800; color: var(--ink-soft); letter-spacing: .02em; }
-    .mood-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
-    .info-pill { padding: 14px 14px 12px; border-radius: 22px; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.25); min-height: 84px; }
-    .info-pill strong { display: block; font-size: .82rem; font-weight: 800; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
-    .info-pill span { font-family: "Baloo 2", cursive; font-size: 1.22rem; line-height: 1; }
-    .visual-panel { padding: 18px; border-radius: 28px; background: radial-gradient(circle at 20% 25%, rgba(255,255,255,.24), transparent 30%), linear-gradient(140deg, rgba(47,34,64,.16), rgba(47,34,64,.08)); border: 1px solid rgba(255,255,255,.25); display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
-    .waveform { display: flex; align-items: end; gap: 8px; height: 84px; }
-    .waveform span { width: 10px; height: 100%; border-radius: 999px; background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(89,225,191,.55)); transform-origin: bottom; animation: equalize 1.2s ease-in-out infinite; box-shadow: 0 10px 16px rgba(0,0,0,.08); }
-    .waveform span:nth-child(2) { animation-delay: -.15s; height: 72%; } .waveform span:nth-child(3) { animation-delay: -.35s; height: 100%; } .waveform span:nth-child(4) { animation-delay: -.1s; height: 66%; } .waveform span:nth-child(5) { animation-delay: -.45s; height: 82%; } .waveform span:nth-child(6) { animation-delay: -.25s; height: 52%; } .waveform span:nth-child(7) { animation-delay: -.55s; height: 92%; } .waveform span:nth-child(8) { animation-delay: -.05s; height: 74%; } .waveform span:nth-child(9) { animation-delay: -.3s; height: 60%; } .waveform span:nth-child(10) { animation-delay: -.4s; height: 96%; }
-    .waveform.paused span { animation-play-state: paused; transform: scaleY(.45); }
-    .visual-badge { display: grid; gap: 8px; justify-items: end; }
-    .floating-tag { display: inline-flex; gap: 8px; align-items: center; border-radius: 999px; background: rgba(255,255,255,.3); padding: 9px 12px; font-size: .86rem; font-weight: 800; white-space: nowrap; }
-    .progress-box { display: grid; gap: 10px; }
-    .progress-track { position: relative; height: 16px; border-radius: 999px; background: rgba(255,255,255,.28); box-shadow: inset 0 1px 10px rgba(0,0,0,.07); overflow: hidden; cursor: pointer; }
-    .progress-track::before { content: ""; position: absolute; inset: 2px; border-radius: inherit; background: rgba(255,255,255,.16); }
-    .progress-bar { position: absolute; inset: 0 auto 0 0; width: 0%; border-radius: inherit; background: linear-gradient(90deg, #59e1bf, #78dcff, #ffd26f, #ff8a4c); box-shadow: 0 0 24px rgba(255,138,76,.25); }
-    .progress-grip { position: absolute; top: 50%; right: -10px; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.92); box-shadow: 0 8px 20px rgba(0,0,0,.18); transform: translateY(-50%); }
-    .timers { display: flex; justify-content: space-between; font-size: .94rem; font-weight: 800; color: var(--ink-soft); }
-    .controls { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
-    .mini-actions, .transport { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .icon-btn, .transport-btn, .play-btn { border: 0; cursor: pointer; color: var(--ink); background: rgba(255,255,255,.28); backdrop-filter: blur(16px); border-radius: 999px; border: 1px solid rgba(255,255,255,.24); box-shadow: 0 12px 30px rgba(0,0,0,.12); transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
-    .icon-btn:hover, .transport-btn:hover, .play-btn:hover, .icon-btn:focus-visible, .transport-btn:focus-visible, .play-btn:focus-visible { transform: translateY(-2px) scale(1.02); background: rgba(255,255,255,.42); outline: none; }
-    .icon-btn { width: 52px; height: 52px; font-size: 1.08rem; }
-    .transport-btn { width: 60px; height: 60px; font-size: 1.18rem; }
-    .play-btn { width: 82px; height: 82px; font-size: 1.55rem; background: linear-gradient(135deg, rgba(255,255,255,.75), rgba(255,255,255,.22)), linear-gradient(135deg, rgba(89,225,191,.85), rgba(255,138,76,.85)); position: relative; overflow: hidden; }
-    .play-btn::after { content: ""; position: absolute; inset: 5px; border-radius: inherit; border: 1px solid rgba(255,255,255,.45); pointer-events: none; }
-    .active-mode { background: linear-gradient(135deg, rgba(255,255,255,.48), rgba(255,255,255,.14)), rgba(255,255,255,.25); color: #1c7458; }
-    .panel-side { padding: 22px; display: grid; grid-template-rows: auto auto minmax(0,1fr); gap: 16px; min-height: 0; }
-    .cartoon-banner { padding: 18px; border-radius: 28px; background: linear-gradient(135deg, rgba(255,255,255,.35), rgba(255,255,255,.16)); border: 1px solid rgba(255,255,255,.28); display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; }
-    .cartoon-face { width: 72px; height: 72px; border-radius: 26px; overflow: hidden; border: 2px solid rgba(255,255,255,.5); box-shadow: 0 14px 24px rgba(0,0,0,.12); transform: rotate(-4deg); }
-    .cartoon-face img { width: 100%; height: 100%; object-fit: cover; }
-    .cartoon-banner h2 { margin: 0 0 4px; font-family: "Baloo 2", cursive; font-size: 1.6rem; line-height: .95; }
-    .cartoon-banner p { margin: 0; color: var(--ink-soft); font-weight: 700; font-size: .95rem; }
-    .side-actions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
-    .cta-card { min-height: 112px; padding: 16px; border-radius: 24px; border: 1px solid rgba(255,255,255,.24); background: rgba(255,255,255,.18); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; cursor: pointer; transition: transform .18s ease, background .18s ease; text-align: left; }
-    .cta-card:hover, .cta-card:focus-visible { transform: translateY(-2px); background: rgba(255,255,255,.3); outline: none; }
-    .cta-card i { font-size: 1.15rem; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 16px; background: rgba(255,255,255,.32); }
-    .cta-card strong { display: block; font-family: "Baloo 2", cursive; font-size: 1.15rem; line-height: 1; }
-    .cta-card span { display: block; font-size: .88rem; font-weight: 800; color: var(--ink-soft); margin-top: 2px; }
-    .playlist-card { min-height: 0; display: grid; grid-template-rows: auto minmax(0,1fr); gap: 14px; border-radius: 30px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.26); padding: 16px; }
-    .playlist-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .playlist-head strong { font-family: "Baloo 2", cursive; font-size: 1.45rem; line-height: 1; }
-    .playlist-head span { font-size: .88rem; font-weight: 800; color: var(--ink-soft); }
-    .playlist { min-height: 0; overflow: auto; display: grid; gap: 10px; padding-right: 4px; }
-    .playlist::-webkit-scrollbar, .lyrics-body::-webkit-scrollbar { width: 8px; }
-    .playlist::-webkit-scrollbar-thumb, .lyrics-body::-webkit-scrollbar-thumb { background: rgba(47,34,64,.24); border-radius: 999px; }
-    .track { width: 100%; border: 0; text-align: left; background: rgba(255,255,255,.16); color: var(--ink); border-radius: 22px; padding: 14px; display: grid; grid-template-columns: 56px minmax(0,1fr) auto; gap: 12px; align-items: center; cursor: pointer; border: 1px solid rgba(255,255,255,.18); transition: transform .18s ease, background .18s ease, border-color .18s ease; }
-    .track:hover, .track:focus-visible { transform: translateX(2px); background: rgba(255,255,255,.28); outline: none; }
-    .track.active { background: linear-gradient(135deg, rgba(255,255,255,.3), rgba(255,255,255,.18)), rgba(89,225,191,.24); border-color: rgba(255,255,255,.34); }
-    .track-cover { width: 56px; height: 56px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 18px rgba(0,0,0,.14); }
-    .track-cover img { width: 100%; height: 100%; object-fit: cover; }
-    .track-copy { min-width: 0; }
-    .track-copy strong { display: block; font-size: 1rem; font-weight: 800; line-height: 1.05; }
-    .track-copy span { display: block; margin-top: 3px; font-size: .86rem; font-weight: 800; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .track-badge { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 999px; background: rgba(255,255,255,.28); font-size: .95rem; }
-    .modal { position: fixed; inset: 0; background: rgba(32, 19, 30, .36); backdrop-filter: blur(10px); display: grid; place-items: center; padding: 18px; z-index: 20; opacity: 0; pointer-events: none; transition: opacity .22s ease; }
-    .modal.show { opacity: 1; pointer-events: auto; }
-    .modal-card { width: min(100%, 760px); max-height: min(82vh, 900px); border-radius: 32px; padding: 18px; border: var(--stroke); background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.16)); backdrop-filter: blur(24px) saturate(145%); box-shadow: var(--shadow); display: grid; grid-template-rows: auto minmax(0,1fr); gap: 16px; transform: translateY(18px) scale(.97); transition: transform .24s ease; }
-    .modal.show .modal-card { transform: translateY(0) scale(1); }
-    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-    .modal-head strong { font-family: "Baloo 2", cursive; font-size: 1.6rem; line-height: 1; }
-    .close-btn { width: 48px; height: 48px; border-radius: 999px; border: 0; cursor: pointer; background: rgba(255,255,255,.28); font-size: 1rem; box-shadow: 0 12px 26px rgba(0,0,0,.12); }
-    .lyrics-wrap { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 16px; min-height: 0; }
-    .lyrics-cover { border-radius: 28px; overflow: hidden; aspect-ratio: 1 / 1.2; box-shadow: 0 14px 26px rgba(0,0,0,.16); }
-    .lyrics-cover img { width: 100%; height: 100%; object-fit: cover; }
-    .lyrics-body { min-height: 0; overflow: auto; background: rgba(255,255,255,.18); border-radius: 24px; padding: 18px; font-size: 1.04rem; line-height: 1.7; white-space: pre-wrap; font-weight: 700; color: #433551; }
-    .toast { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translate(-50%, 120%); padding: 14px 18px; border-radius: 999px; background: rgba(47,34,64,.92); color: #fff; display: inline-flex; align-items: center; gap: 10px; font-weight: 800; z-index: 30; opacity: 0; transition: transform .22s ease, opacity .22s ease; max-width: calc(100% - 24px); text-align: center; box-shadow: 0 20px 36px rgba(0,0,0,.24); }
-    .toast.show { opacity: 1; transform: translate(-50%, 0); }
-    @media (max-width: 980px) { .content { grid-template-columns: 1fr; } .panel-side { min-height: 560px; } }
-    @media (max-width: 720px) { .shell { width: min(calc(100% - 16px), var(--max)); } .topbar { align-items: stretch; flex-direction: column; } .top-actions { justify-content: stretch; } .top-actions .action-pill { flex: 1 1 auto; } .hero-strip { grid-template-columns: 92px 1fr; } .mood-grid { grid-template-columns: 1fr; } .controls { grid-template-columns: 1fr; } .mini-actions, .transport { justify-content: center; } .transport { order: -1; } .panel-side { padding: 18px; min-height: 0; } .lyrics-wrap { grid-template-columns: 1fr; } .lyrics-cover { aspect-ratio: 16 / 9; } .side-actions { grid-template-columns: 1fr; } }
-    @media (max-width: 480px) { .player-panel, .panel-side { padding: 16px; } .brand-copy strong { font-size: 1.2rem; } .song-title { font-size: 1.85rem; } .play-btn { width: 74px; height: 74px; } .transport-btn, .icon-btn { width: 52px; height: 52px; } .visual-panel { grid-template-columns: 1fr; } .visual-badge { justify-items: start; grid-auto-flow: column; } .track { grid-template-columns: 52px minmax(0,1fr); } .track-badge { display: none; } }
-  </style>
+    <style>
+        :root {
+            --green: #2ecc71;
+            --orange: #ff9f43;
+            --blue: #48dbfb;
+            --pink: #fd79a8;
+            --stroke: #1a1a1a;
+            --card: rgba(255,251,240,0.93);
+            --card-solid: #fffbf0;
+            --border: 2.5px solid var(--stroke);
+            --shadow: 7px 7px 0 rgba(0,0,0,0.17);
+            --shadow-soft: 0 24px 60px rgba(0,0,0,0.14);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh; min-height: 100dvh;
+            font-family: 'Patrick Hand', cursive;
+            color: var(--stroke);
+            overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            padding: max(16px, env(safe-area-inset-top)) 14px max(20px, env(safe-area-inset-bottom));
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        /* BG */
+        .bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 50%, #74ebd5 100%);
+            background-size: 300% 300%;
+            animation: bgMove 14s ease infinite;
+        }
+        .bg::after {
+            content: "";
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255,159,67,0.12) 0%, transparent 35%);
+        }
+        @keyframes bgMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+        /* FLOATING NOTES */
+        .notes { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .note {
+            position: absolute; opacity: 0;
+            animation: floatUp linear infinite;
+            user-select: none;
+        }
+        @keyframes floatUp {
+            0%   { opacity: 0; transform: translateY(20px) rotate(-10deg); }
+            15%  { opacity: 0.6; }
+            85%  { opacity: 0.3; }
+            100% { opacity: 0; transform: translateY(-110vh) rotate(30deg); }
+        }
+
+        /* LAYOUT */
+        .layout {
+            position: relative; z-index: 1;
+            width: 100%; max-width: 420px;
+            display: flex; flex-direction: column; gap: 13px;
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            animation: fadeDown .45s ease both;
+        }
+        @keyframes fadeDown { from{opacity:0;transform:translateY(-14px)} to{opacity:1;transform:none} }
+
+        .brand { display: flex; align-items: center; gap: 9px; }
+        .brand-icon {
+            width: 42px; height: 42px;
+            background: linear-gradient(155deg, #55e89c, var(--green));
+            border-radius: 50%; border: var(--border);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4.5px;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+            animation: sway 7s ease-in-out infinite;
+        }
+        @keyframes sway { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+        .wave-line { background: transparent; border-top: 2.5px solid var(--stroke); border-radius: 50%; }
+        .w1{width:46%} .w2{width:66%} .w3{width:40%}
+
+        .brand-name {
+            font-family: 'Fredoka', sans-serif; font-size: 1.95rem; font-weight: 700;
+            color: var(--orange); -webkit-text-stroke: 1.2px var(--stroke);
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.09);
+            letter-spacing: 0.5px;
+        }
+
+        .install-chip {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 9px 15px; border-radius: 999px; border: var(--border);
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            box-shadow: var(--shadow); font-family: 'Fredoka', sans-serif;
+            font-size: .86rem; font-weight: 600; cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+            white-space: nowrap; color: var(--stroke);
+        }
+        .install-chip:hover { transform: translateY(-2px); box-shadow: 10px 10px 0 rgba(0,0,0,0.13); background: rgba(255,255,255,.88); }
+        .install-chip:active { transform: translateY(1px); }
+        .install-chip.hidden { display: none; }
+
+        /* PLAYER CARD */
+        .player-card {
+            background: var(--card); backdrop-filter: blur(18px);
+            border-radius: 32px; border: var(--border);
+            box-shadow: var(--shadow), var(--shadow-soft);
+            padding: 22px 20px 20px;
+            position: relative; overflow: hidden;
+            animation: slideUp .6s cubic-bezier(.22,.61,.36,1) both .08s;
+        }
+        @keyframes slideUp { from{opacity:0;transform:translateY(28px) scale(.97)} to{opacity:1;transform:none} }
+
+        /* top rainbow bar */
+        .player-card::before {
+            content: "";
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--green), var(--blue), var(--orange), var(--pink), var(--green));
+            background-size: 200% 100%;
+            animation: barSlide 3s linear infinite;
+        }
+        @keyframes barSlide { 0%{background-position:200%} 100%{background-position:0%} }
+
+        /* glow blob */
+        .player-card::after {
+            content: ""; pointer-events: none;
+            position: absolute; inset: auto -40% -60% -40%; height: 220px;
+            background: radial-gradient(circle, rgba(72,219,251,.2), transparent 60%);
+        }
+
+        /* ALBUM COVER */
+        .cover-area { position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 18px; }
+
+        .ring {
+            position: absolute; inset: -9px; border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--green) 0%, var(--blue) 33%, var(--orange) 66%, var(--pink) 85%, var(--green) 100%);
+            opacity: 0; transition: opacity .5s ease;
+            animation: spin 6s linear infinite;
+        }
+        .ring.on { opacity: 1; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .disc {
+            position: relative; z-index: 1;
+            width: 100%; height: 100%;
+            border-radius: 50%; border: var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow), 0 0 0 7px var(--card);
+            transition: border-radius .45s cubic-bezier(.22,.61,.36,1);
+        }
+        .disc.flat { border-radius: 24px; }
+
+        .disc img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+            transition: transform .45s ease;
+        }
+        .disc.spinning img { animation: vinylSpin 8s linear infinite; }
+        @keyframes vinylSpin { to { transform: rotate(360deg); } }
+
+        .vinyl-dot {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 9%; height: 9%;
+            background: var(--card-solid); border: 2px solid var(--stroke);
+            border-radius: 50%; z-index: 3;
+            opacity: 0; transition: opacity .4s ease;
+        }
+        .disc.spinning .vinyl-dot { opacity: 1; }
+
+        /* lyrics inside cover */
+        .lyrics-panel {
+            position: absolute; inset: 0; border-radius: inherit; z-index: 10;
+            background: rgba(255,251,240,.97);
+            display: flex; flex-direction: column; padding: 16px;
+            opacity: 0; pointer-events: none; transition: opacity .25s ease;
+        }
+        .lyrics-panel.show { opacity: 1; pointer-events: auto; }
+        .lyrics-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .lyrics-tag {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 7px 12px; border-radius: 999px; border: var(--border);
+            background: #fff; font-family: 'Fredoka', sans-serif; font-size: .87rem;
+            box-shadow: 3px 3px 0 rgba(0,0,0,.1);
+        }
+        .lyrics-scroll {
+            flex: 1; overflow-y: auto; text-align: center;
+            font-size: 1.04rem; line-height: 1.7; white-space: pre-wrap;
+            color: var(--stroke); padding: 2px 2px 8px;
+        }
+        .lyrics-scroll::-webkit-scrollbar { width: 5px; }
+        .lyrics-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,.2); border-radius: 3px; }
+        .lyrics-close {
+            margin-top: 10px; align-self: center;
+            background: var(--stroke); color: #fff;
+            border: none; padding: 10px 22px; border-radius: 20px;
+            cursor: pointer; font-family: 'Fredoka', sans-serif; font-size: .95rem;
+            transition: opacity .15s ease;
+        }
+        .lyrics-close:hover { opacity: .85; }
+
+        /* faixa badge */
+        .faixa-badge {
+            position: absolute; z-index: 4; bottom: 12px; left: 12px;
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 7px 12px; border-radius: 999px; border: var(--border);
+            background: rgba(255,251,240,.92); font-family: 'Fredoka', sans-serif;
+            font-size: .82rem; box-shadow: 4px 4px 0 rgba(0,0,0,.12);
+        }
+
+        /* SONG INFO */
+        .song-info { text-align: center; margin-bottom: 12px; }
+        .song-title {
+            font-family: 'Fredoka', sans-serif; font-size: 1.62rem; font-weight: 700;
+            color: var(--green); -webkit-text-stroke: .9px var(--stroke);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .song-artist {
+            font-size: 1.02rem; color: #888; font-weight: bold;
+            text-transform: uppercase; letter-spacing: .7px; margin-top: 3px;
+        }
+
+        /* EQUALIZER */
+        .eq {
+            display: flex; align-items: flex-end; justify-content: center;
+            gap: 4px; height: 26px; margin: 8px auto 14px;
+            opacity: 0; transition: opacity .4s ease;
+        }
+        .eq.on { opacity: 1; }
+        .eq-b {
+            width: 5px; border-radius: 3px;
+            background: linear-gradient(to top, var(--green), var(--blue));
+            border: 1px solid rgba(0,0,0,.1);
+            transform-origin: bottom;
+            animation: eqPulse ease-in-out infinite alternate;
+        }
+        .eq-b:nth-child(1){height:35%;animation-duration:.4s}
+        .eq-b:nth-child(2){height:70%;animation-duration:.6s;animation-delay:.08s}
+        .eq-b:nth-child(3){height:100%;animation-duration:.43s;animation-delay:.16s}
+        .eq-b:nth-child(4){height:55%;animation-duration:.55s;animation-delay:.04s}
+        .eq-b:nth-child(5){height:80%;animation-duration:.5s;animation-delay:.12s}
+        .eq-b:nth-child(6){height:42%;animation-duration:.65s;animation-delay:.2s}
+        .eq-b:nth-child(7){height:90%;animation-duration:.42s;animation-delay:.06s}
+        @keyframes eqPulse { from{transform:scaleY(.12)} to{transform:scaleY(1)} }
+
+        /* PROGRESS */
+        .progress-bar-wrap {
+            height: 14px; background: rgba(255,255,255,.8);
+            border: var(--border); border-radius: 999px;
+            cursor: pointer; overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,.07), var(--shadow);
+            margin-bottom: 6px;
+        }
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--orange), #ffd166, var(--orange));
+            background-size: 200% 100%;
+            animation: fillGlow 2s linear infinite;
+            border-right: 2px solid rgba(0,0,0,.2);
+            border-radius: inherit;
+            transition: width .1s linear;
+        }
+        @keyframes fillGlow { 0%{background-position:200%} 100%{background-position:0%} }
+        .timers {
+            display: flex; justify-content: space-between;
+            font-size: .9rem; font-weight: bold; margin-bottom: 18px;
+            color: rgba(26,26,26,.65);
+        }
+
+        /* CONTROLS */
+        .controls {
+            display: flex; align-items: center; justify-content: space-between; gap: 4px; padding: 0 2px;
+        }
+        .btn {
+            background: none; border: none; cursor: pointer;
+            color: var(--stroke); font-size: 1.25rem;
+            width: 44px; height: 44px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: transform .15s ease, color .15s ease, background .15s ease;
+            position: relative;
+        }
+        .btn:hover { color: var(--green); transform: scale(1.12); background: rgba(255,255,255,.6); }
+        .btn:active { transform: scale(.9); }
+        .btn.on { color: var(--orange); }
+        .btn.on::after {
+            content: ""; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
+            width: 5px; height: 5px; background: var(--orange); border-radius: 50%; border: 1px solid var(--stroke);
+        }
+
+        .play-btn {
+            width: 78px; height: 78px;
+            background: linear-gradient(155deg, #55e89c, var(--green));
+            border: var(--border); border-radius: 50%; font-size: 2rem;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 5px 5px 0 var(--stroke);
+            transition: all .18s cubic-bezier(.34,1.56,.64,1);
+            position: relative; overflow: hidden; cursor: pointer;
+        }
+        .play-btn::before {
+            content: ""; position: absolute; inset: 0;
+            background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.4), transparent 55%);
+            pointer-events: none;
+        }
+        .play-btn:hover { transform: translate(-2px,-2px) scale(1.06); box-shadow: 8px 8px 0 var(--stroke); }
+        .play-btn:active { transform: translate(2px,2px) scale(.97); box-shadow: 2px 2px 0 var(--stroke); }
+        .play-btn.playing { animation: heartbeat 1.8s ease-in-out infinite; }
+        @keyframes heartbeat {
+            0%,100%{box-shadow:5px 5px 0 var(--stroke), 0 0 0 0 rgba(46,204,113,.5)}
+            50%{box-shadow:5px 5px 0 var(--stroke), 0 0 0 15px rgba(46,204,113,0)}
+        }
+
+        /* BOTTOM */
+        .bottom-row {
+            display: grid; grid-template-columns: 1fr auto; gap: 10px;
+            animation: slideUp .6s cubic-bezier(.22,.61,.36,1) both .2s;
+        }
+        .action-btn {
+            background: var(--card-solid); border: var(--border);
+            padding: 13px 16px; border-radius: 999px;
+            font-family: 'Patrick Hand', cursive; font-size: 1.15rem; font-weight: bold;
+            cursor: pointer; box-shadow: var(--shadow);
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 9px; transition: all .18s ease; color: var(--stroke);
+        }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 10px 10px 0 rgba(0,0,0,.15); background: #fff; color: var(--orange); }
+        .action-btn:active { transform: translateY(1px); }
+
+        /* MODALS */
+        .overlay {
+            position: fixed; inset: 0; z-index: 99;
+            background: rgba(0,0,0,.55); backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: flex-end;
+            padding: 0 10px max(16px, env(safe-area-inset-bottom));
+            opacity: 0; pointer-events: none;
+            transition: opacity .25s ease;
+        }
+        .overlay.show { opacity: 1; pointer-events: auto; }
+        .sheet {
+            background: var(--card-solid); width: min(100%, 430px);
+            max-height: 75vh; border: var(--border); border-radius: 28px 28px 20px 20px;
+            padding: 20px 18px;
+            box-shadow: 0 -4px 0 var(--stroke), var(--shadow-soft);
+            display: flex; flex-direction: column;
+            transform: translateY(40px);
+            transition: transform .3s cubic-bezier(.22,.61,.36,1);
+        }
+        .overlay.show .sheet { transform: translateY(0); }
+        .drag-bar { width: 40px; height: 4px; background: #ccc; border-radius: 3px; margin: 0 auto 16px; }
+        .sheet-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px dashed rgba(0,0,0,.12); padding-bottom: 12px; margin-bottom: 12px;
+        }
+        .sheet-title { font-family: 'Fredoka', sans-serif; font-size: 1.3rem; color: var(--blue); -webkit-text-stroke: .4px var(--stroke); }
+        .x-btn {
+            background: #ff7675; border: var(--border); border-radius: 50%;
+            width: 32px; height: 32px; cursor: pointer; color: #fff;
+            font-weight: bold; display: flex; align-items: center; justify-content: center;
+            font-size: .85rem; transition: transform .15s ease;
+        }
+        .x-btn:hover { transform: rotate(90deg); }
+
+        /* playlist list */
+        .plist { list-style: none; overflow-y: auto; }
+        .plist::-webkit-scrollbar { width: 5px; }
+        .plist::-webkit-scrollbar-thumb { background: rgba(0,0,0,.18); border-radius: 3px; }
+        .pitem {
+            padding: 12px 10px; margin-bottom: 6px;
+            border: 2px solid transparent; border-radius: 16px;
+            cursor: pointer; display: flex; align-items: center; gap: 10px;
+            transition: all .18s ease;
+        }
+        .pitem:hover { background: #f3efe7; border-color: #e4ddd1; transform: translateX(4px); }
+        .pitem.active { background: #e0f7ef; border-color: var(--green); }
+        .pnum { font-family: 'Fredoka', sans-serif; font-size: .84rem; color: #bbb; min-width: 22px; text-align: center; }
+        .pitem.active .pnum { color: var(--green); }
+        .pinfo { flex: 1; }
+        .pinfo strong { display: block; font-family: 'Fredoka', sans-serif; font-size: 1rem; }
+        .pinfo small { font-size: .84rem; color: #999; }
+        .pip {
+            width: 28px; height: 28px; border-radius: 50%; background: var(--green);
+            border: 2px solid var(--stroke); display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: .62rem; opacity: 0; transition: opacity .2s;
+        }
+        .pitem.active .pip { opacity: 1; }
+
+        /* install */
+        .install-body { display: flex; flex-direction: column; gap: 12px; }
+        .iopt { padding: 14px; border: var(--border); border-radius: 20px; background: rgba(255,255,255,.7); }
+        .iopt strong { display: block; font-family: 'Fredoka', sans-serif; margin-bottom: 5px; }
+        .iopt p { line-height: 1.5; font-size: .95rem; }
+
+        /* TOAST */
+        .toast {
+            position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom));
+            transform: translate(-50%, 120%);
+            background: rgba(26,26,26,.95); color: #fff;
+            border-radius: 999px; padding: 11px 18px;
+            font-family: 'Fredoka', sans-serif; font-size: .92rem;
+            z-index: 200; display: inline-flex; align-items: center; gap: 10px;
+            transition: transform .28s cubic-bezier(.22,.61,.36,1), opacity .28s ease;
+            opacity: 0; max-width: calc(100% - 32px);
+        }
+        .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+        /* RESPONSIVE */
+        @media (max-width: 420px) {
+            body { align-items: stretch; }
+            .layout { max-width: 100%; }
+            .player-card { border-radius: 26px; padding: 18px 15px 16px; }
+            .play-btn { width: 70px; height: 70px; font-size: 1.8rem; }
+            .bottom-row { grid-template-columns: 1fr; }
+            .share-btn { display: none; }
+        }
+    </style>
 </head>
 <body>
-  <main class="shell">
-    <header class="topbar">
-      <div class="brand-pill" aria-label="Marca Carimbozando">
-        <div class="brand-mark"><img src="musicas/album_cover.png" alt="Logo do Carimbozando"></div>
-        <div class="brand-copy">
-          <strong>Carimbozando</strong>
-          <span>Player oficial do grupo</span>
+
+<div class="bg"></div>
+<div class="notes" id="notes"></div>
+
+<div class="layout">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="brand">
+            <div class="brand-icon" aria-hidden="true">
+                <div class="wave-line w1"></div>
+                <div class="wave-line w2"></div>
+                <div class="wave-line w3"></div>
+            </div>
+            <div class="brand-name">Ispótifai</div>
         </div>
-      </div>
-      <div class="top-actions">
-        <button class="action-pill" id="share-btn" type="button"><i class="fa-solid fa-share-nodes"></i> Compartilhar</button>
-        <button class="action-pill primary" id="install-btn" type="button"><i class="fa-solid fa-mobile-screen-button"></i> Instalar app</button>
-      </div>
-    </header>
-    <section class="content">
-      <section class="glass-card player-panel" id="player-shell">
-        <div class="hero-strip">
-          <div class="hero-cover"><img id="cover" src="musicas/album_cover.png" alt="Capa da faixa atual"></div>
-          <div>
-            <div class="eyebrow"><i class="fa-solid fa-star"></i><span>Som com identidade cartoon</span></div>
-            <h1 class="song-title" id="title">Carregando...</h1>
-            <p class="song-artist" id="artist">Carimbozando</p>
-          </div>
+        <button class="install-chip hidden" id="install-btn" type="button">
+            <i class="fa-solid fa-download"></i><span>Instalar</span>
+        </button>
+    </div>
+
+    <!-- PLAYER CARD -->
+    <div class="player-card">
+
+        <!-- ALBUM COVER -->
+        <div class="cover-area">
+            <div class="ring" id="ring"></div>
+            <div class="disc flat" id="disc">
+                <!-- LYRICS INSIDE COVER -->
+                <div class="lyrics-panel" id="lyrics-panel">
+                    <div class="lyrics-top">
+                        <div class="lyrics-tag">
+                            <i class="fa-solid fa-microphone-lines"></i>
+                            <span>Letra</span>
+                        </div>
+                    </div>
+                    <div class="lyrics-scroll" id="lyrics-text">Carregando...</div>
+                    <button class="lyrics-close" id="close-lyrics">Fechar letra</button>
+                </div>
+                <img src="" alt="Capa do álbum" id="cover">
+                <div class="vinyl-dot"></div>
+            </div>
+            <div class="faixa-badge">
+                <i class="fa-solid fa-compact-disc"></i>
+                <span id="faixa-txt">Faixa 1</span>
+            </div>
         </div>
-        <div class="mood-grid">
-          <div class="info-pill"><strong>Tocando agora</strong><span id="now-playing">Preparando</span></div>
-          <div class="info-pill"><strong>Modo</strong><span id="play-mode">Sequencial</span></div>
-          <div class="info-pill"><strong>Clima</strong><span>Leve & divertido</span></div>
+
+        <!-- SONG INFO -->
+        <div class="song-info">
+            <div class="song-title" id="song-title">Carregando...</div>
+            <div class="song-artist" id="song-artist">Carimbozando</div>
         </div>
-        <div class="visual-panel">
-          <div class="waveform paused" id="waveform" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          <div class="visual-badge">
-            <div class="floating-tag"><i class="fa-solid fa-record-vinyl"></i><span>Faixa <span id="track-number">1</span></span></div>
-            <div class="floating-tag"><i class="fa-solid fa-music"></i><span>Carimbozando</span></div>
-          </div>
+
+        <!-- EQUALIZER -->
+        <div class="eq" id="eq">
+            <div class="eq-b"></div>
+            <div class="eq-b"></div>
+            <div class="eq-b"></div>
+            <div class="eq-b"></div>
+            <div class="eq-b"></div>
+            <div class="eq-b"></div>
+            <div class="eq-b"></div>
         </div>
-        <div class="progress-box">
-          <div class="progress-track" id="progress-track" aria-label="Barra de progresso da música"><div class="progress-bar" id="progress-bar"><div class="progress-grip"></div></div></div>
-          <div class="timers"><span id="current-time">0:00</span><span id="duration">0:00</span></div>
+
+        <!-- PROGRESS -->
+        <div class="progress-bar-wrap" id="prog-wrap">
+            <div class="progress-fill" id="prog-fill"></div>
         </div>
+        <div class="timers">
+            <span id="curr-time">0:00</span>
+            <span id="dur-time">0:00</span>
+        </div>
+
+        <!-- CONTROLS -->
         <div class="controls">
-          <div class="mini-actions">
-            <button class="icon-btn" id="lyrics-btn" type="button" aria-label="Abrir letra"><i class="fa-solid fa-scroll"></i></button>
-            <button class="icon-btn" id="shuffle-btn" type="button" aria-label="Embaralhar"><i class="fa-solid fa-shuffle"></i></button>
-            <button class="icon-btn" id="repeat-btn" type="button" aria-label="Modo repetir"><i class="fa-solid fa-repeat"></i></button>
-          </div>
-          <div class="transport">
-            <button class="transport-btn" id="prev-btn" type="button" aria-label="Faixa anterior"><i class="fa-solid fa-backward-step"></i></button>
-            <button class="play-btn" id="play-btn" type="button" aria-label="Tocar ou pausar"><i class="fa-solid fa-play"></i></button>
-            <button class="transport-btn" id="next-btn" type="button" aria-label="Próxima faixa"><i class="fa-solid fa-forward-step"></i></button>
-          </div>
-          <div class="mini-actions" style="justify-content:flex-end;"><button class="icon-btn" id="playlist-btn" type="button" aria-label="Abrir playlist"><i class="fa-solid fa-list"></i></button></div>
+            <button class="btn" id="lyrics-btn" title="Ver letra" aria-label="Ver letra">
+                <i class="fas fa-comment-dots"></i>
+            </button>
+            <button class="btn" id="btn-prev" aria-label="Anterior">
+                <i class="fas fa-backward-step"></i>
+            </button>
+            <button class="play-btn" id="btn-play" aria-label="Tocar / Pausar">
+                <i class="fas fa-play" id="play-icon"></i>
+            </button>
+            <button class="btn" id="btn-next" aria-label="Próxima">
+                <i class="fas fa-forward-step"></i>
+            </button>
+            <button class="btn" id="btn-shuffle" aria-label="Aleatório">
+                <i class="fas fa-shuffle"></i>
+            </button>
+            <button class="btn" id="btn-repeat" aria-label="Repetir">
+                <i class="fas fa-repeat"></i>
+            </button>
         </div>
-      </section>
-      <aside class="glass-card panel-side">
-        <div class="cartoon-banner">
-          <div class="cartoon-face"><img src="musicas/album_cover.png" alt="Arte do álbum"></div>
-          <div><h2>Ispótifai do Carimbozando</h2><p>Mais moderno, divertido, com glassmorfismo e mantendo a alma visual do projeto.</p></div>
-        </div>
-        <div class="side-actions">
-          <button class="cta-card" id="cta-lyrics" type="button"><i class="fa-solid fa-microphone-lines"></i><div><strong>Ver letra</strong><span>Acompanhe a canção em tela cheia.</span></div></button>
-          <button class="cta-card" id="cta-install" type="button"><i class="fa-solid fa-download"></i><div><strong>Instalar</strong><span>Adicionar no celular com o ícone do logo.</span></div></button>
-        </div>
-        <div class="playlist-card">
-          <div class="playlist-head"><div><strong>Nossas músicas</strong><span id="playlist-count">0 faixas</span></div><div class="floating-tag"><i class="fa-solid fa-heart"></i><span>Player autoral</span></div></div>
-          <div class="playlist" id="playlist"></div>
-        </div>
-      </aside>
-    </section>
-  </main>
-
-  <div class="modal" id="lyrics-modal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="lyrics-modal-title">
-      <div class="modal-head"><strong id="lyrics-modal-title">Letra da música</strong><button class="close-btn" id="close-lyrics" type="button" aria-label="Fechar letra"><i class="fa-solid fa-xmark"></i></button></div>
-      <div class="lyrics-wrap"><div class="lyrics-cover"><img id="lyrics-cover" src="musicas/album_cover.png" alt="Capa da música"></div><div class="lyrics-body" id="lyrics-body">Carregando letra...</div></div>
     </div>
-  </div>
 
-  <div class="modal" id="install-modal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="install-modal-title" style="width:min(100%,560px);">
-      <div class="modal-head"><strong id="install-modal-title">Instalar no aparelho</strong><button class="close-btn" id="close-install" type="button" aria-label="Fechar instalação"><i class="fa-solid fa-xmark"></i></button></div>
-      <div style="display:grid; gap:14px;">
-        <div class="cta-card" style="cursor:default; min-height:unset;"><div><strong>Android / Chrome</strong><span id="install-help">Toque em instalar. Se o navegador ainda não liberar, abra o menu do Chrome e escolha “Instalar app” ou “Adicionar à tela inicial”.</span></div></div>
-        <div class="cta-card" style="cursor:default; min-height:unset;"><div><strong>iPhone / Safari</strong><span>No Safari, use Compartilhar → Adicionar à Tela de Início.</span></div></div>
-        <button class="action-pill primary" id="install-now" type="button" style="justify-content:center; min-height:58px;"><i class="fa-solid fa-mobile-screen-button"></i> Tentar instalar agora</button>
-      </div>
+    <!-- BOTTOM ROW -->
+    <div class="bottom-row">
+        <button class="action-btn" id="playlist-btn" type="button">
+            <i class="fas fa-list-music"></i> Nossas músicas
+        </button>
+        <button class="action-btn share-btn" id="share-btn" type="button">
+            <i class="fa-solid fa-share-nodes"></i>
+        </button>
     </div>
-  </div>
+</div>
 
-  <div class="toast" id="toast"></div>
-  <audio id="audio" preload="metadata"></audio>
+<!-- PLAYLIST SHEET -->
+<div class="overlay" id="playlist-overlay" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="plist-title">
+        <div class="drag-bar"></div>
+        <div class="sheet-header">
+            <span class="sheet-title" id="plist-title">🎵 Nossas Músicas</span>
+            <button class="x-btn" id="close-playlist" aria-label="Fechar">✕</button>
+        </div>
+        <ul class="plist" id="plist-ul"></ul>
+    </div>
+</div>
 
-  <script>
-    const songs = [
-      { title: "O Ofício de Ser", artist: "Carimbozando", src: "musicas/O Ofício de Ser.mp3", lyricsFile: "musicas/O Ofício de Ser.txt", cover: "musicas/album_cover.png" },
-      { title: "A Dona do Mundo", artist: "Carimbozando", src: "musicas/A Dona do Mundo.mp3", lyricsFile: "musicas/A Dona do Mundo.txt", cover: "musicas/album_cover.png" },
-      { title: "Onde o Sol se Demora", artist: "Carimbozando", src: "musicas/Onde o Sol se Demora.mp3", lyricsFile: "musicas/Onde o Sol se Demora.txt", cover: "musicas/album_cover.png" },
-      { title: "O Rio que eu Era", artist: "Carimbozando", src: "musicas/O Rio que eu Era.mp3", lyricsFile: "musicas/O Rio que eu Era.txt", cover: "musicas/album_cover.png" },
-      { title: "O Norte é o Adiante", artist: "Carimbozando", src: "musicas/O Norte é o Adiante.mp3", lyricsFile: "musicas/O Norte é o Adiante.txt", cover: "musicas/album_cover.png" },
-      { title: "Onde a Voz Mora", artist: "Carimbozando", src: "musicas/Onde a Voz Mora.mp3", lyricsFile: "musicas/Onde a Voz Mora.txt", cover: "musicas/album_cover.png" }
-    ];
-    const audio = document.getElementById('audio');
-    const titleEl = document.getElementById('title');
-    const artistEl = document.getElementById('artist');
-    const coverEl = document.getElementById('cover');
-    const lyricsCoverEl = document.getElementById('lyrics-cover');
-    const nowPlayingEl = document.getElementById('now-playing');
-    const playModeEl = document.getElementById('play-mode');
-    const trackNumberEl = document.getElementById('track-number');
-    const playlistCountEl = document.getElementById('playlist-count');
-    const playlistEl = document.getElementById('playlist');
-    const progressTrack = document.getElementById('progress-track');
-    const progressBar = document.getElementById('progress-bar');
-    const currentTimeEl = document.getElementById('current-time');
-    const durationEl = document.getElementById('duration');
-    const playBtn = document.getElementById('play-btn');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const shuffleBtn = document.getElementById('shuffle-btn');
-    const repeatBtn = document.getElementById('repeat-btn');
-    const lyricsBtn = document.getElementById('lyrics-btn');
-    const playlistBtn = document.getElementById('playlist-btn');
-    const shareBtn = document.getElementById('share-btn');
-    const installBtn = document.getElementById('install-btn');
-    const ctaLyrics = document.getElementById('cta-lyrics');
-    const ctaInstall = document.getElementById('cta-install');
-    const playerShell = document.getElementById('player-shell');
-    const waveform = document.getElementById('waveform');
-    const lyricsModal = document.getElementById('lyrics-modal');
-    const closeLyricsBtn = document.getElementById('close-lyrics');
-    const lyricsBody = document.getElementById('lyrics-body');
-    const installModal = document.getElementById('install-modal');
-    const closeInstallBtn = document.getElementById('close-install');
-    const installNowBtn = document.getElementById('install-now');
-    const installHelp = document.getElementById('install-help');
-    const toastEl = document.getElementById('toast');
-    let songIndex = 0; let isShuffle = false; let repeatMode = 'off'; let deferredPrompt = null; let toastTimer = null;
-    function showToast(message, icon = 'fa-solid fa-circle-check') { toastEl.innerHTML = `<i class="${icon}" aria-hidden="true"></i><span>${message}</span>`; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800); }
-    function formatTime(value) { if (!Number.isFinite(value)) return '0:00'; const minutes = Math.floor(value / 60); const seconds = Math.floor(value % 60); return `${minutes}:${seconds.toString().padStart(2, '0')}`; }
-    function getModeLabel() { if (repeatMode === 'one') return 'Repetir faixa'; if (repeatMode === 'all') return 'Repetir álbum'; if (isShuffle) return 'Embaralhado'; return 'Sequencial'; }
-    function updateModeUI() { playModeEl.textContent = getModeLabel(); shuffleBtn.classList.toggle('active-mode', isShuffle); repeatBtn.classList.toggle('active-mode', repeatMode !== 'off'); repeatBtn.innerHTML = repeatMode === 'one' ? '<i class="fa-solid fa-repeat"></i><span style="position:absolute; font-size:.62rem; transform:translate(9px,-10px);">1</span>' : '<i class="fa-solid fa-repeat"></i>'; }
-    function setPlayingState(isPlaying) { playBtn.innerHTML = isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>'; waveform.classList.toggle('paused', !isPlaying); playerShell.classList.toggle('is-playing', isPlaying); }
-    async function fetchLyrics(path) { lyricsBody.textContent = 'Carregando letra...'; try { const response = await fetch(encodeURI(path)); if (!response.ok) throw new Error(); lyricsBody.textContent = await response.text(); } catch { lyricsBody.textContent = 'Não foi possível carregar a letra desta faixa.'; } }
-    function updateMediaSession(song) { if (!('mediaSession' in navigator)) return; navigator.mediaSession.metadata = new MediaMetadata({ title: song.title, artist: song.artist, album: 'Carimbozando', artwork: [ { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' }, { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' } ] }); navigator.mediaSession.setActionHandler('play', playSong); navigator.mediaSession.setActionHandler('pause', pauseSong); navigator.mediaSession.setActionHandler('previoustrack', prevSong); navigator.mediaSession.setActionHandler('nexttrack', nextSong); }
-    function loadSong(index) { const song = songs[index]; titleEl.textContent = song.title; artistEl.textContent = song.artist; coverEl.src = song.cover; lyricsCoverEl.src = song.cover; audio.src = encodeURI(song.src); nowPlayingEl.textContent = `${index + 1} de ${songs.length}`; trackNumberEl.textContent = index + 1; updateModeUI(); fetchLyrics(song.lyricsFile); updateMediaSession(song); updatePlaylistActiveState(); }
-    function updatePlaylistActiveState() { [...playlistEl.querySelectorAll('.track')].forEach((btn, idx) => { btn.classList.toggle('active', idx === songIndex); }); }
-    function renderPlaylist() { playlistEl.innerHTML = ''; songs.forEach((song, index) => { const button = document.createElement('button'); button.className = 'track'; button.type = 'button'; button.innerHTML = `<span class="track-cover"><img src="${song.cover}" alt="Capa da música ${song.title}"></span><span class="track-copy"><strong>${song.title}</strong><span>${song.artist}</span></span><span class="track-badge"><i class="fa-solid fa-play"></i></span>`; button.addEventListener('click', () => { songIndex = index; loadSong(songIndex); playSong(); }); playlistEl.appendChild(button); }); playlistCountEl.textContent = `${songs.length} faixas`; updatePlaylistActiveState(); }
-    async function playSong() { try { await audio.play(); setPlayingState(true); } catch { setPlayingState(false); showToast('Toque novamente para liberar a reprodução.', 'fa-solid fa-volume-xmark'); } }
-    function pauseSong() { audio.pause(); setPlayingState(false); }
-    function nextSong() { if (isShuffle && songs.length > 1) { let nextIndex; do { nextIndex = Math.floor(Math.random() * songs.length); } while (nextIndex === songIndex); songIndex = nextIndex; } else { songIndex = (songIndex + 1) % songs.length; } loadSong(songIndex); playSong(); }
-    function prevSong() { songIndex = (songIndex - 1 + songs.length) % songs.length; loadSong(songIndex); playSong(); }
-    function openModal(modal) { modal.classList.add('show'); modal.setAttribute('aria-hidden', 'false'); }
-    function closeModal(modal) { modal.classList.remove('show'); modal.setAttribute('aria-hidden', 'true'); }
-    function isStandaloneMode() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
-    function setInstallButtonState(state = 'default') { if (state === 'installed') { installBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> App instalado'; installBtn.disabled = true; return; } installBtn.disabled = false; installBtn.innerHTML = '<i class="fa-solid fa-mobile-screen-button"></i> Instalar app'; installHelp.innerHTML = state === 'available' ? 'Seu navegador já liberou a instalação. Toque no botão abaixo para instalar agora.' : 'Toque em instalar. Se o navegador ainda não liberar, abra o menu do Chrome e escolha “Instalar app” ou “Adicionar à tela inicial”.'; }
-    async function tryInstall() { if (isStandaloneMode()) { setInstallButtonState('installed'); showToast('O app já está instalado neste aparelho.', 'fa-solid fa-circle-check'); return; } if (!deferredPrompt) { openModal(installModal); return; } deferredPrompt.prompt(); const choice = await deferredPrompt.userChoice; if (choice.outcome === 'accepted') { showToast('Instalação iniciada. Verifique a tela inicial.', 'fa-solid fa-download'); } else { showToast('Instalação cancelada por enquanto.', 'fa-solid fa-mobile-screen'); } deferredPrompt = null; setInstallButtonState('default'); }
-    playBtn.addEventListener('click', () => audio.paused ? playSong() : pauseSong()); prevBtn.addEventListener('click', prevSong); nextBtn.addEventListener('click', nextSong); playlistBtn.addEventListener('click', () => document.querySelector('.playlist-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
-    shuffleBtn.addEventListener('click', () => { isShuffle = !isShuffle; updateModeUI(); showToast(isShuffle ? 'Modo embaralhado ativado.' : 'Modo embaralhado desativado.', 'fa-solid fa-shuffle'); });
-    repeatBtn.addEventListener('click', () => { repeatMode = repeatMode === 'off' ? 'all' : repeatMode === 'all' ? 'one' : 'off'; updateModeUI(); const label = repeatMode === 'all' ? 'Repetição do álbum ativada.' : repeatMode === 'one' ? 'Repetição da faixa ativada.' : 'Repetição desativada.'; showToast(label, 'fa-solid fa-repeat'); });
-    progressTrack.addEventListener('click', (event) => { const rect = progressTrack.getBoundingClientRect(); const ratio = (event.clientX - rect.left) / rect.width; audio.currentTime = Math.max(0, Math.min(1, ratio)) * (audio.duration || 0); });
-    audio.addEventListener('timeupdate', () => { const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0; progressBar.style.width = `${progress}%`; currentTimeEl.textContent = formatTime(audio.currentTime); durationEl.textContent = formatTime(audio.duration); });
-    audio.addEventListener('loadedmetadata', () => { durationEl.textContent = formatTime(audio.duration); });
-    audio.addEventListener('play', () => setPlayingState(true)); audio.addEventListener('pause', () => setPlayingState(false));
-    audio.addEventListener('ended', () => { if (repeatMode === 'one') { audio.currentTime = 0; playSong(); return; } if (repeatMode === 'all' || isShuffle || songIndex < songs.length - 1) { nextSong(); } else { pauseSong(); audio.currentTime = 0; } });
-    lyricsBtn.addEventListener('click', () => openModal(lyricsModal)); ctaLyrics.addEventListener('click', () => openModal(lyricsModal)); closeLyricsBtn.addEventListener('click', () => closeModal(lyricsModal)); lyricsModal.addEventListener('click', (event) => { if (event.target === lyricsModal) closeModal(lyricsModal); });
-    installBtn.addEventListener('click', tryInstall); installNowBtn.addEventListener('click', tryInstall); ctaInstall.addEventListener('click', () => openModal(installModal)); closeInstallBtn.addEventListener('click', () => closeModal(installModal)); installModal.addEventListener('click', (event) => { if (event.target === installModal) closeModal(installModal); });
-    shareBtn.addEventListener('click', async () => { const shareData = { title: 'Carimbozando', text: 'Vem ouvir o player do Carimbozando.', url: window.location.href }; try { if (navigator.share) { await navigator.share(shareData); } else if (navigator.clipboard) { await navigator.clipboard.writeText(window.location.href); showToast('Link copiado para compartilhar.', 'fa-solid fa-link'); } else { showToast('Compartilhamento não disponível neste navegador.', 'fa-solid fa-share-nodes'); } } catch {} });
-    window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredPrompt = event; setInstallButtonState('available'); showToast('Seu aparelho liberou a instalação do app.', 'fa-solid fa-mobile-screen-button'); });
-    window.addEventListener('appinstalled', () => { deferredPrompt = null; setInstallButtonState('installed'); closeModal(installModal); showToast('Carimbozando instalado com sucesso.', 'fa-solid fa-circle-check'); });
-    document.addEventListener('keydown', (event) => { const tag = document.activeElement?.tagName || ''; if (event.code === 'Space' && !['INPUT', 'TEXTAREA'].includes(tag)) { event.preventDefault(); audio.paused ? playSong() : pauseSong(); } if (event.key === 'ArrowRight') nextSong(); if (event.key === 'ArrowLeft') prevSong(); if (event.key === 'Escape') { closeModal(lyricsModal); closeModal(installModal); } });
-    if ('serviceWorker' in navigator) { window.addEventListener('load', async () => { try { await navigator.serviceWorker.register('./service-worker.js'); } catch {} }); }
-    if (isStandaloneMode()) { setInstallButtonState('installed'); } else { setInstallButtonState('default'); }
-    renderPlaylist(); loadSong(songIndex); setPlayingState(false);
-  </script>
+<!-- INSTALL SHEET -->
+<div class="overlay" id="install-overlay" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="inst-title">
+        <div class="drag-bar"></div>
+        <div class="sheet-header">
+            <span class="sheet-title" id="inst-title">📲 Instalar no celular</span>
+            <button class="x-btn" id="close-install" aria-label="Fechar">✕</button>
+        </div>
+        <div class="install-body">
+            <div class="iopt">
+                <strong>🤖 Android / Chrome</strong>
+                <p id="install-help">Toque em <b>Instalar app</b>. Se não aparecer, use o menu ⋮ → <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</p>
+            </div>
+            <div class="iopt">
+                <strong>🍎 iPhone / Safari</strong>
+                <p>Abra no Safari, toque em <b>Compartilhar</b> (□↑) e escolha <b>Adicionar à Tela de Início</b>.</p>
+            </div>
+            <button class="action-btn" id="install-now-btn" type="button" style="width:100%;justify-content:center">
+                <i class="fa-solid fa-download"></i> Instalar agora
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+const songs = [
+    { title:"O Ofício de Ser",       artist:"Carimbozando", src:"musicas/O Ofício de Ser.mp3",       cover:"musicas/album_cover.png", lyrics:"musicas/O Ofício de Ser.txt" },
+    { title:"A Dona do Mundo",        artist:"Carimbozando", src:"musicas/A Dona do Mundo.mp3",       cover:"musicas/album_cover.png", lyrics:"musicas/A Dona do Mundo.txt" },
+    { title:"Onde o Sol se Demora",   artist:"Carimbozando", src:"musicas/Onde o Sol se Demora.mp3",  cover:"musicas/album_cover.png", lyrics:"musicas/Onde o Sol se Demora.txt" },
+    { title:"O Rio que eu Era",       artist:"Carimbozando", src:"musicas/O Rio que eu Era.mp3",      cover:"musicas/album_cover.png", lyrics:"musicas/O Rio que eu Era.txt" },
+    { title:"O Norte é o Adiante",    artist:"Carimbozando", src:"musicas/O Norte é o Adiante.mp3",   cover:"musicas/album_cover.png", lyrics:"musicas/O Norte é o Adiante.txt" },
+];
+const optSongs = [
+    { title:"Onde a Voz Mora", artist:"Carimbozando", src:"musicas/Onde a Voz Mora.mp3", cover:"musicas/album_cover.png", lyrics:"musicas/Onde a Voz Mora.txt" },
+];
+
+/* ═══════════════════════════════════════════
+   ELEMENTS
+═══════════════════════════════════════════ */
+const audio         = document.getElementById('audio');
+const playBtn       = document.getElementById('btn-play');
+const playIcon      = document.getElementById('play-icon');
+const prevBtn       = document.getElementById('btn-prev');
+const nextBtn       = document.getElementById('btn-next');
+const shuffleBtn    = document.getElementById('btn-shuffle');
+const repeatBtn     = document.getElementById('btn-repeat');
+const titleEl       = document.getElementById('song-title');
+const artistEl      = document.getElementById('song-artist');
+const coverEl       = document.getElementById('cover');
+const disc          = document.getElementById('disc');
+const ring          = document.getElementById('ring');
+const eq            = document.getElementById('eq');
+const progWrap      = document.getElementById('prog-wrap');
+const progFill      = document.getElementById('prog-fill');
+const currTimeEl    = document.getElementById('curr-time');
+const durTimeEl     = document.getElementById('dur-time');
+const faixaTxt      = document.getElementById('faixa-txt');
+const plistUl       = document.getElementById('plist-ul');
+const plistBtn      = document.getElementById('playlist-btn');
+const plistOverlay  = document.getElementById('playlist-overlay');
+const closePlist    = document.getElementById('close-playlist');
+const lyricsBtn     = document.getElementById('lyrics-btn');
+const lyricsPanel   = document.getElementById('lyrics-panel');
+const lyricsText    = document.getElementById('lyrics-text');
+const closeLyrics   = document.getElementById('close-lyrics');
+const shareBtn      = document.getElementById('share-btn');
+const installBtn    = document.getElementById('install-btn');
+const installOvl    = document.getElementById('install-overlay');
+const closeInst     = document.getElementById('close-install');
+const installNowBtn = document.getElementById('install-now-btn');
+const installHelp   = document.getElementById('install-help');
+const toast         = document.getElementById('toast');
+const notesWrap     = document.getElementById('notes');
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let idx        = 0;
+let shuffle    = false;
+let repeat     = 'off'; // off | all | one
+let deferred   = null;
+let toastTimer = null;
+
+/* ═══════════════════════════════════════════
+   FLOATING NOTES
+═══════════════════════════════════════════ */
+const NOTES = ['♩','♪','♫','♬','🎵','🎶'];
+const COLORS = ['#2ecc71','#48dbfb','#ff9f43','#fd79a8','#ffffff'];
+function spawnNote() {
+    const el = document.createElement('span');
+    el.className = 'note';
+    el.textContent = NOTES[Math.floor(Math.random() * NOTES.length)];
+    el.style.left = (Math.random() * 95) + 'vw';
+    el.style.bottom = '-30px';
+    const dur = 7 + Math.random() * 9;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = (Math.random() * 1.5) + 's';
+    el.style.fontSize = (.85 + Math.random() * 1.3) + 'rem';
+    el.style.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    el.style.textShadow = '0 2px 4px rgba(0,0,0,0.15)';
+    notesWrap.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 2) * 1000);
+}
+// Initial burst
+for (let i = 0; i < 6; i++) setTimeout(spawnNote, i * 350);
+setInterval(spawnNote, 1300);
+
+/* ═══════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════ */
+function fmt(s) {
+    const m = Math.floor(s / 60);
+    return `${m}:${Math.floor(s % 60).toString().padStart(2,'0')}`;
+}
+function showToast(msg, icon = 'fa-solid fa-circle-check') {
+    toast.innerHTML = `<i class="${icon}"></i><span>${msg}</span>`;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+/* ═══════════════════════════════════════════
+   LOAD SONG
+═══════════════════════════════════════════ */
+function loadSong(song) {
+    titleEl.textContent  = song.title;
+    artistEl.textContent = song.artist;
+    coverEl.src          = song.cover || '';
+    audio.src            = song.src;
+    progFill.style.width = '0%';
+    currTimeEl.textContent = '0:00';
+    durTimeEl.textContent  = '0:00';
+    faixaTxt.textContent   = `Faixa ${idx + 1}`;
+    // Lyrics
+    lyricsText.textContent = 'Carregando...';
+    fetch(song.lyrics)
+        .then(r => r.ok ? r.text() : 'Letra não disponível.')
+        .then(t => { lyricsText.textContent = t; })
+        .catch(() => { lyricsText.textContent = 'Letra não disponível.'; });
+    // Animate title
+    titleEl.style.animation = 'none';
+    void titleEl.offsetWidth;
+    titleEl.style.animation = 'fadeIn .35s ease';
+    renderPlaylist();
+}
+
+/* ═══════════════════════════════════════════
+   PLAY STATE
+═══════════════════════════════════════════ */
+function setPlaying(playing) {
+    if (playing) {
+        playIcon.className = 'fas fa-pause';
+        playBtn.classList.add('playing');
+        disc.classList.add('spinning');
+        disc.classList.remove('flat');
+        ring.classList.add('on');
+        eq.classList.add('on');
+    } else {
+        playIcon.className = 'fas fa-play';
+        playBtn.classList.remove('playing');
+        disc.classList.remove('spinning');
+        disc.classList.add('flat');
+        ring.classList.remove('on');
+        eq.classList.remove('on');
+    }
+}
+function playSong()  { audio.play();  setPlaying(true);  }
+function pauseSong() { audio.pause(); setPlaying(false); }
+
+function nextSong() {
+    if (shuffle) {
+        let ni; do { ni = Math.floor(Math.random() * songs.length); } while (ni === idx && songs.length > 1);
+        idx = ni;
+    } else { idx = (idx + 1) % songs.length; }
+    loadSong(songs[idx]); playSong();
+}
+function prevSong() {
+    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+    idx = (idx - 1 + songs.length) % songs.length;
+    loadSong(songs[idx]); playSong();
+}
+
+/* ═══════════════════════════════════════════
+   EVENTS
+═══════════════════════════════════════════ */
+playBtn.addEventListener('click', () => audio.paused ? playSong() : pauseSong());
+prevBtn.addEventListener('click', prevSong);
+nextBtn.addEventListener('click', nextSong);
+
+shuffleBtn.addEventListener('click', () => {
+    shuffle = !shuffle;
+    shuffleBtn.classList.toggle('on', shuffle);
+    showToast(shuffle ? 'Modo aleatório ligado 🎲' : 'Modo sequencial', 'fa-solid fa-shuffle');
+});
+
+repeatBtn.addEventListener('click', () => {
+    const m = ['off','all','one'];
+    repeat = m[(m.indexOf(repeat) + 1) % 3];
+    repeatBtn.classList.toggle('on', repeat !== 'off');
+    const lbl = {off:'Sem repetição',all:'Repetir tudo 🔁',one:'Repetindo esta 🔂'};
+    showToast(lbl[repeat], 'fa-solid fa-repeat');
+});
+
+audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    progFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    currTimeEl.textContent = fmt(audio.currentTime);
+});
+audio.addEventListener('loadedmetadata', () => { durTimeEl.textContent = fmt(audio.duration); });
+audio.addEventListener('ended', () => {
+    if (repeat === 'one') { audio.currentTime = 0; playSong(); return; }
+    if (repeat === 'all' || shuffle) { nextSong(); return; }
+    if (idx < songs.length - 1) nextSong();
+    else { pauseSong(); audio.currentTime = 0; progFill.style.width = '0%'; }
+});
+
+progWrap.addEventListener('click', (e) => {
+    const r = progWrap.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - r.left) / r.width) * (audio.duration || 0);
+});
+
+lyricsBtn.addEventListener('click', () => lyricsPanel.classList.add('show'));
+closeLyrics.addEventListener('click', () => lyricsPanel.classList.remove('show'));
+
+document.addEventListener('keydown', (e) => {
+    if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+    if (e.code === 'Space') { e.preventDefault(); audio.paused ? playSong() : pauseSong(); }
+    if (e.key === 'ArrowRight') nextSong();
+    if (e.key === 'ArrowLeft') prevSong();
+    if (e.key === 'Escape') {
+        plistOverlay.classList.remove('show');
+        installOvl.classList.remove('show');
+        lyricsPanel.classList.remove('show');
+    }
+});
+
+shareBtn.addEventListener('click', async () => {
+    const d = { title:'Ispótifai – Carimbozando', text:'Vem ouvir Carimbozando 🎵', url: location.href };
+    try {
+        if (navigator.share) await navigator.share(d);
+        else { await navigator.clipboard.writeText(location.href); showToast('Link copiado!','fa-solid fa-link'); }
+    } catch {}
+});
+
+/* ═══════════════════════════════════════════
+   PLAYLIST
+═══════════════════════════════════════════ */
+plistBtn.addEventListener('click', () => { plistOverlay.classList.add('show'); plistOverlay.setAttribute('aria-hidden','false'); });
+closePlist.addEventListener('click', () => { plistOverlay.classList.remove('show'); plistOverlay.setAttribute('aria-hidden','true'); });
+plistOverlay.addEventListener('click', e => { if(e.target===plistOverlay) { plistOverlay.classList.remove('show'); } });
+
+function renderPlaylist() {
+    plistUl.innerHTML = '';
+    songs.forEach((s, i) => {
+        const li = document.createElement('li');
+        li.className = 'pitem' + (i === idx ? ' active' : '');
+        li.tabIndex = 0;
+        li.innerHTML = `
+            <span class="pnum">${i+1}</span>
+            <div class="pinfo"><strong>${s.title}</strong><small>${s.artist}</small></div>
+            <div class="pip"><i class="fas fa-play" style="font-size:.58rem;margin-left:1px"></i></div>
+        `;
+        const go = () => { idx = i; loadSong(songs[i]); playSong(); plistOverlay.classList.remove('show'); };
+        li.addEventListener('click', go);
+        li.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();go();} });
+        plistUl.appendChild(li);
+    });
+}
+
+/* ═══════════════════════════════════════════
+   INSTALL / PWA
+═══════════════════════════════════════════ */
+function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+}
+function setInstallState(state) {
+    installBtn.disabled = false; installBtn.style.opacity = '1';
+    if (state === 'installed') {
+        installBtn.innerHTML = '<i class="fa-solid fa-mobile-screen-button"></i><span>Instalado</span>';
+        installBtn.disabled = true; installBtn.style.opacity = '.7';
+        installBtn.classList.remove('hidden');
+    } else if (state === 'available') {
+        installBtn.innerHTML = '<i class="fa-solid fa-download"></i><span>Instalar</span>';
+        installBtn.classList.remove('hidden');
+        installHelp.innerHTML = 'Toque em <b>Instalar agora</b>. O Chrome liberou a instalação neste aparelho! 🎉';
+    } else {
+        installBtn.innerHTML = '<i class="fa-solid fa-download"></i><span>Instalar</span>';
+        installBtn.classList.remove('hidden');
+    }
+}
+
+async function tryInstall() {
+    if (isStandalone()) { setInstallState('installed'); showToast('App já instalado! 🎊','fa-solid fa-circle-check'); return; }
+    if (deferred) {
+        deferred.prompt();
+        const { outcome } = await deferred.userChoice;
+        deferred = null;
+        if (outcome === 'accepted') showToast('Instalando... Procure o ícone na tela inicial 🚀','fa-solid fa-download');
+        else showToast('Instalação cancelada.','fa-solid fa-mobile-screen');
+        setInstallState('ready');
+    } else {
+        installOvl.classList.add('show'); installOvl.setAttribute('aria-hidden','false');
+    }
+}
+
+installBtn.addEventListener('click', tryInstall);
+installNowBtn.addEventListener('click', tryInstall);
+closeInst.addEventListener('click', () => { installOvl.classList.remove('show'); installOvl.setAttribute('aria-hidden','true'); });
+installOvl.addEventListener('click', e => { if(e.target===installOvl){ installOvl.classList.remove('show'); } });
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferred = e;
+    setInstallState('available');
+    showToast('Você pode instalar o app! 📲','fa-solid fa-mobile-screen-button');
+});
+window.addEventListener('appinstalled', () => {
+    deferred = null;
+    setInstallState('installed');
+    installOvl.classList.remove('show');
+    showToast('Carimbozando instalado com sucesso! 🎊','fa-solid fa-circle-check');
+});
+
+if (isStandalone()) setInstallState('installed');
+else setInstallState('ready');
+
+/* ═══════════════════════════════════════════
+   OPTIONAL SONGS + SERVICE WORKER
+═══════════════════════════════════════════ */
+async function attachOptional() {
+    for (const s of optSongs) {
+        try { const r = await fetch(encodeURI(s.src),{method:'HEAD'}); if(r.ok) songs.push(s); } catch {}
+    }
+    renderPlaylist();
+}
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+        try { await navigator.serviceWorker.register('./service-worker.js'); } catch {}
+        setTimeout(() => { if (!deferred && !isStandalone()) setInstallState('ready'); }, 1200);
+    });
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+// add fadeIn keyframe dynamically (for title animation)
+const sty = document.createElement('style');
+sty.textContent = '@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}';
+document.head.appendChild(sty);
+
+loadSong(songs[idx]);
+attachOptional();
+</script>
 </body>
 </html>

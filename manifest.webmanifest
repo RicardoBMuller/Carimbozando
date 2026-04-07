@@ -1,14 +1,15 @@
 {
   "id": "./",
-  "name": "Carimbozando",
+  "name": "Ispótifai - Carimbozando",
   "short_name": "Carimbozando",
-  "description": "Player oficial do grupo musical Carimbozando.",
-  "start_url": "./index.html",
+  "description": "Player musical instalável do projeto Carimbozando.",
+  "start_url": "./index.html?source=pwa",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
-  "background_color": "#fff3d2",
-  "theme_color": "#ff8a4c",
+  "background_color": "#74ebd5",
+  "theme_color": "#2ecc71",
   "lang": "pt-BR",
   "icons": [
     {
@@ -22,11 +23,13 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
+    }
+  ],
+  "shortcuts": [
     {
-      "src": "icons/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
+      "name": "Abrir player",
+      "short_name": "Player",
+      "url": "./index.html?source=shortcut"
     }
   ]
 }
