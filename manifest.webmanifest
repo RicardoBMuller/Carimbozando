@@ -2,15 +2,11 @@
   "id": "./",
   "name": "Ispótifai - Carimbozando",
   "short_name": "Carimbozando",
-  "description": "Player musical instalável do Carimbozando com letras, playlist e visual moderno.",
+  "description": "Player musical instalável do projeto Carimbozando.",
   "start_url": "./index.html?source=pwa",
   "scope": "./",
   "display": "standalone",
-  "display_override": [
-    "standalone",
-    "window-controls-overlay",
-    "minimal-ui"
-  ],
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#74ebd5",
   "theme_color": "#2ecc71",
@@ -27,12 +23,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "icons/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
     }
   ],
   "shortcuts": [
@@ -40,11 +30,6 @@
       "name": "Abrir player",
       "short_name": "Player",
       "url": "./index.html?source=shortcut"
-    },
-    {
-      "name": "Ver músicas",
-      "short_name": "Músicas",
-      "url": "./index.html?view=playlist"
     }
   ]
 }
