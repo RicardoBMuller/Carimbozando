@@ -1,26 +1,35 @@
 {
-  "id": "carimbozando-app-v1",
+  "id": "./",
   "name": "Ispótifai - Carimbozando",
   "short_name": "Carimbozando",
-  "description": "Player oficial da banda Carimbozando.",
-  "start_url": "./index.html",
+  "description": "Player musical instalável do projeto Carimbozando.",
+  "start_url": "./index.html?source=pwa",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#74ebd5",
   "theme_color": "#2ecc71",
+  "lang": "pt-BR",
   "icons": [
     {
       "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Abrir player",
+      "short_name": "Player",
+      "url": "./index.html?source=shortcut"
     }
   ]
 }
