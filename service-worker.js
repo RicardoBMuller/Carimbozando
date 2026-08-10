@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ispotifai-carimbozando-v6';
+const CACHE_NAME = 'ispotifai-carimbozando-v7';
 const APP_SHELL = [
   './',
   './index.html',
@@ -14,8 +14,8 @@ const APP_SHELL = [
   './musicas/Amor%20a%20Segunda%20Vista.txt',
   './musicas/A%20Dona%20do%20Mundo.mp3',
   './musicas/A%20Dona%20do%20Mundo.txt',
-  './musicas/O%20Dia%20a%20Dia%20N%C3%A3o%20Para.mp3',
-  './musicas/O%20Dia%20a%20Dia%20N%C3%A3o%20Para.txt',
+  './musicas/O%20dia%20a%20dia%20n%C3%A3o%20para.mp3',
+  './musicas/O%20dia%20a%20dia%20n%C3%A3o%20para.txt',
   './musicas/Aquela%20Saudade.mp3',
   './musicas/Aquela%20Saudade.txt',
   './musicas/A%20Vida%20Mudou.mp3',
@@ -30,8 +30,8 @@ const APP_SHELL = [
   './musicas/O%20Of%C3%ADcio%20de%20Ser.txt',
   './musicas/O%20Rio%20que%20eu%20Era.mp3',
   './musicas/O%20Rio%20que%20eu%20Era.txt',
-  './musicas/A%20Melhor%20Festa.mp3',
-  './musicas/A%20Melhor%20Festa.txt',
+  './musicas/A%20melhor%20festa.mp3',
+  './musicas/A%20melhor%20festa.txt',
 ];
 
 self.addEventListener('install', (event) => {
