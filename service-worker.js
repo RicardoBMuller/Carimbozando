@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ispotifai-carimbozando-v4';
+const CACHE_NAME = 'ispotifai-carimbozando-v5';
 const APP_SHELL = [
   './',
   './index.html',
@@ -8,17 +8,26 @@ const APP_SHELL = [
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
   './musicas/album_cover.png',
-  './musicas/A%20Dona%20do%20Mundo.mp3',
-  './musicas/A%20Dona%20do%20Mundo.txt',
-  './musicas/O%20Norte%20%C3%A9%20o%20Adiante.mp3',
-  './musicas/O%20Norte%20%C3%A9%20o%20Adiante.txt',
   './musicas/O%20Of%C3%ADcio%20de%20Ser.mp3',
   './musicas/O%20Of%C3%ADcio%20de%20Ser.txt',
-  './musicas/O%20Rio%20que%20eu%20Era.mp3',
-  './musicas/O%20Rio%20que%20eu%20Era.txt',
+  './musicas/A%20Dona%20do%20Mundo.mp3',
+  './musicas/A%20Dona%20do%20Mundo.txt',
+  './musicas/Amor%20a%20Segunda%20Vista.mp3',
+  './musicas/Amor%20a%20Segunda%20Vista.txt',
   './musicas/Onde%20o%20Sol%20se%20Demora.mp3',
   './musicas/Onde%20o%20Sol%20se%20Demora.txt',
-  './musicas/Onde%20a%20Voz%20Mora.txt'
+  './musicas/O%20Rio%20que%20eu%20Era.mp3',
+  './musicas/O%20Rio%20que%20eu%20Era.txt',
+  './musicas/O%20Norte%20%C3%A9%20o%20Adiante.mp3',
+  './musicas/O%20Norte%20%C3%A9%20o%20Adiante.txt',
+  './musicas/Onde%20a%20Voz%20Mora.mp3',
+  './musicas/Onde%20a%20Voz%20Mora.txt',
+  './musicas/Aquela%20Saudade.mp3',
+  './musicas/Aquela%20Saudade.txt',
+  './musicas/A%20Vida%20Mudou.mp3',
+  './musicas/A%20Vida%20Mudou.txt',
+  './musicas/Le%20Ciel%20en%20Papier.mp3',
+  './musicas/Le%20Ciel%20en%20Papier.txt',
 ];
 
 self.addEventListener('install', (event) => {
